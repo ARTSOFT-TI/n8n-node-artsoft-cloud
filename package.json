@@ -1,0 +1,56 @@
+{
+	"name": "n8n-nodes-artsoft",
+	"version": "1.3.0",
+	"description": "n8n community node for ARTSOFT ERP integration via XML",
+	"keywords": [
+		"n8n-community-node-package"
+	],
+	"license": "MIT",
+	"homepage": "",
+	"author": {
+		"name": ""
+	},
+	"repository": {
+		"type": "git",
+		"url": ""
+	},
+	"main": "index.js",
+	"scripts": {
+		"build": "tsc && copyfiles nodes/artsoft.svg dist/",
+		"dev": "tsc --watch",
+		"pack": "npm run build && npm pack",
+		"format": "prettier nodes credentials --write",
+		"lint": "eslint nodes credentials --ext .ts",
+		"lintfix": "eslint nodes credentials --ext .ts --fix",
+		"prepublishOnly": "npm run build && npm run lint"
+	},
+	"files": [
+		"dist"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"credentials": [
+			"dist/credentials/ArtsoftCloud.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/ArtsoftCloud.node.js"
+		]
+	},
+	"devDependencies": {
+		"@types/node": "^18.16.0",
+		"@typescript-eslint/parser": "~5.45",
+		"copyfiles": "^2.4.1",
+		"eslint": "~8.28",
+		"eslint-plugin-n8n-nodes-base": "^1.11.0",
+		"n8n-workflow": "*",
+		"prettier": "^2.8.8",
+		"typescript": "~5.1.0"
+	},
+	"dependencies": {
+		"fast-xml-parser": "^4.3.6",
+		"xmlbuilder2": "^3.1.1"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
+}
