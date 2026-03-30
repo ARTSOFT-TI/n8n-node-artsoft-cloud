@@ -1,8 +1,17 @@
 import { IDataObject, IExecuteFunctions, NodeApiError } from 'n8n-workflow';
 
 export interface CloudCredentials {
-	baseUrl: string;
+	nif: string;
 	apiKey: string;
+	development: boolean;
+}
+
+const PRODUCTION_BASE_URL = 'https://%s.artsoft.cloud/api';
+const DEVELOPMENT_BASE_URL = 'http://%s.local.artsoft.cloud:3000/api';
+
+export function getBaseUrl(credentials: CloudCredentials): string {
+	const template = credentials.development ? DEVELOPMENT_BASE_URL : PRODUCTION_BASE_URL;
+	return template.replace('%s', credentials.nif);
 }
 
 export interface PaginationParams {
@@ -43,8 +52,8 @@ export async function cloudApiRequest(
 	body?: IDataObject,
 	qs?: IDataObject,
 ): Promise<Record<string, unknown>> {
-	const credentials = (await this.getCredentials('artsoftCloudApi')) as CloudCredentials;
-	const baseUrl = credentials.baseUrl.replace(/\/$/, '');
+	const credentials = (await this.getCredentials('artsoftCloudApi')) as unknown as CloudCredentials;
+	const baseUrl = getBaseUrl(credentials);
 
 	try {
 		const response = await this.helpers.httpRequest({

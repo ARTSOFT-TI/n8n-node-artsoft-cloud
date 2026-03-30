@@ -34,6 +34,7 @@ export const cloudCustomerOperations = [
 ];
 
 const R = 'cloudCustomers';
+const CU = ['cloudCreateCustomer', 'cloudUpdateCustomer'];
 
 export const cloudCustomerProperties: INodeProperties[] = [
 	// ══════════════════════════════════════════════════════════════════
@@ -100,17 +101,255 @@ export const cloudCustomerProperties: INodeProperties[] = [
 	},
 
 	// ══════════════════════════════════════════════════════════════════
-	// CREATE / UPDATE — corpo (CustomerSchema)
+	// CREATE / UPDATE — campos individuais
 	// ══════════════════════════════════════════════════════════════════
 	{
-		displayName: 'Dados do Cliente',
-		name: 'customerData',
-		type: 'json',
+		displayName: 'Número',
+		name: 'customerNumber',
+		type: 'number',
 		required: true,
-		default: '{\n  "name": "",\n  "shortName": "",\n  "isCompany": false\n}',
-		displayOptions: {
-			show: { resource: [R], operation: ['cloudCreateCustomer', 'cloudUpdateCustomer'] },
-		},
-		description: 'Dados do cliente no formato JSON (CustomerSchema)',
+		default: 0,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Número sequencial do cliente',
+	},
+	{
+		displayName: 'Nome',
+		name: 'customerName',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Nome completo do cliente',
+	},
+	{
+		displayName: 'Nome Curto',
+		name: 'customerShortName',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Abreviatura do nome',
+	},
+	{
+		displayName: 'NIF',
+		name: 'customerFiscalNumber',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Número de identificação fiscal',
+	},
+	{
+		displayName: 'É Empresa',
+		name: 'customerIsCompany',
+		type: 'boolean',
+		default: false,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Whether the customer is a company',
+	},
+	{
+		displayName: 'Email',
+		name: 'customerEmail',
+		type: 'string',
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Email do cliente',
+	},
+
+	// — Morada —
+	{
+		displayName: 'Morada',
+		name: 'customerAddress',
+		type: 'string',
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Endereço do cliente',
+	},
+	{
+		displayName: 'Localidade',
+		name: 'customerLocality',
+		type: 'string',
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Localidade',
+	},
+	{
+		displayName: 'Código Postal',
+		name: 'customerPostalCode',
+		type: 'string',
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Código postal (ex: 1000-001)',
+	},
+	{
+		displayName: 'Distrito',
+		name: 'customerDistrict',
+		type: 'number',
+		default: 0,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'ID do distrito',
+	},
+	{
+		displayName: 'Concelho',
+		name: 'customerCounty',
+		type: 'number',
+		default: 0,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'ID do concelho',
+	},
+	{
+		displayName: 'Freguesia',
+		name: 'customerParish',
+		type: 'number',
+		default: 0,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'ID da freguesia',
+	},
+	{
+		displayName: 'Região do País',
+		name: 'customerCountryRegionId',
+		type: 'number',
+		default: 0,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'ID da região do país',
+	},
+	{
+		displayName: 'Código do País',
+		name: 'customerCountryCode',
+		type: 'number',
+		default: 620,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Código do país (620 = Portugal)',
+	},
+
+	// — Empresa —
+	{
+		displayName: 'Nome Comercial',
+		name: 'customerTradeName',
+		type: 'string',
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU, customerIsCompany: [true] } },
+		description: 'Nome comercial da empresa',
+	},
+	{
+		displayName: 'EORI',
+		name: 'customerEori',
+		type: 'string',
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU, customerIsCompany: [true] } },
+		description: 'Número EORI',
+	},
+
+	// — Opções adicionais —
+	{
+		displayName: 'Campos Adicionais',
+		name: 'customerAdditionalFields',
+		type: 'collection',
+		placeholder: 'Adicionar Campo',
+		default: {},
+		displayOptions: { show: { resource: [R], operation: CU } },
+		options: [
+			{
+				displayName: 'Data de Nascimento',
+				name: 'birthDate',
+				type: 'string',
+				default: '',
+				description: 'Data de nascimento (ISO 8601)',
+			},
+			{
+				displayName: 'Estado',
+				name: 'status',
+				type: 'options',
+				default: 'ACTIVE',
+				options: [
+					{ name: 'Ativo', value: 'ACTIVE' },
+					{ name: 'Inativo', value: 'INACTIVE' },
+				],
+			},
+			{
+				displayName: 'Inativo',
+				name: 'inactive',
+				type: 'boolean',
+				default: false,
+			},
+			{
+				displayName: 'ID Estado do Cliente',
+				name: 'customerStatusId',
+				type: 'number',
+				default: 1,
+			},
+			{
+				displayName: 'Email de Entrega de Documentos',
+				name: 'documentDeliveryEmail',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'Limite de Crédito',
+				name: 'creditLimit',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'Desconto',
+				name: 'discount',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'ID Isenção IVA',
+				name: 'exemptVatId',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'ID Modo de Expedição',
+				name: 'expeditionModeId',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'Observações',
+				name: 'observation1',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'URL',
+				name: 'url',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'Sem Referências MB',
+				name: 'noMbReferences',
+				type: 'boolean',
+				default: false,
+			},
+			{
+				displayName: 'Anónimo',
+				name: 'anonymous',
+				type: 'boolean',
+				default: false,
+			},
+			{
+				displayName: 'Registo Privado',
+				name: 'privateRecord',
+				type: 'boolean',
+				default: false,
+			},
+			{
+				displayName: 'País do Telefone',
+				name: 'phoneNumberCountryId',
+				type: 'number',
+				default: 620,
+			},
+			{
+				displayName: 'País do Telemóvel',
+				name: 'mobileNumberCountryId',
+				type: 'number',
+				default: 620,
+			},
+		],
 	},
 ];

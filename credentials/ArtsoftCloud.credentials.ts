@@ -1,14 +1,6 @@
 import {
-	IAuthenticate,
-	Icon,
-	ICredentialDataDecryptedObject,
-	ICredentialTestRequest,
 	ICredentialType,
-	IDataObject,
-	IHttpRequestHelper,
 	INodeProperties,
-	Themed,
-	ThemeIconColor,
 } from 'n8n-workflow';
 
 export class ArtsoftCloud implements ICredentialType {
@@ -17,20 +9,27 @@ export class ArtsoftCloud implements ICredentialType {
 	documentationUrl = '';
 	properties: INodeProperties[] = [
 		{
-			displayName: 'Chave api',
-			name: 'apiKey',
+			displayName: 'NIF',
+			name: 'nif',
 			type: 'string',
 			default: '',
-			placeholder: '',
+			placeholder: '123456789',
 			required: true,
 		},
 		{
-			displayName: 'URL api',
-			name: 'baseUrl',
+			displayName: 'Chave API',
+			name: 'apiKey',
 			type: 'string',
+			typeOptions: { password: true },
 			default: '',
-			placeholder: 'https://login.local.artsoft.cloud:3000/',
 			required: true,
+		},
+		{
+			displayName: 'Development',
+			name: 'development',
+			type: 'boolean',
+			default: false,
+			description: 'Se ativado, usa o ambiente de desenvolvimento',
 		},
 	];
 }

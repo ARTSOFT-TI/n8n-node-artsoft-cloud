@@ -1,10 +1,4 @@
 import { IExecuteFunctions } from 'n8n-workflow';
-import { executeCreateClient, executeDeleteClient, executeGetClient, executeUpdateClient } from './customer';
-import { executeCreateSupplier, executeDeleteSupplier, executeGetSupplier, executeUpdateSupplier } from './fornecedor';
-import { executeCreateProduct, executeDeleteProduct, executeGetProduct, executeUpdateProduct } from './produtos';
-import { executeCreateDocument, executeDeleteDocument, executeGetDocument, executeSignDocument } from './documentos';
-import { executeCreateWorkflow, executeGetWorkflow, executeGetWorkflows, executeUpdateWorkflow, executeWorkflowAction } from './workflow';
-import { executeAddMessage, executeCreateEvent, executeDeleteEvent, executeGetEvent, executeListEvents, executeUpdateEvent } from './event';
 import { cloudListCustomers, cloudGetCustomer, cloudCreateCustomer, cloudUpdateCustomer, cloudDeleteCustomer } from './artsoft-cloud/customers';
 import { cloudListSuppliers, cloudGetSupplier, cloudCreateSupplier, cloudUpdateSupplier, cloudDeleteSupplier } from './artsoft-cloud/suppliers';
 import { cloudListProducts, cloudGetProduct, cloudCreateProduct, cloudUpdateProduct, cloudDeleteProduct } from './artsoft-cloud/products';
@@ -19,45 +13,6 @@ export type OperationHandler = (
 ) => Promise<Record<string, unknown>>;
 
 export const operations: Record<string, OperationHandler> = {
-	// Customer
-	createClient: executeCreateClient,
-	getClient: executeGetClient,
-	updateClient: executeUpdateClient,
-	deleteClient: executeDeleteClient,
-
-	// Suppliers
-	createSupplier: executeCreateSupplier,
-	getSupplier: executeGetSupplier,
-	updateSupplier: executeUpdateSupplier,
-	deleteSupplier: executeDeleteSupplier,
-
-	// Produtos
-	createProduct: executeCreateProduct,
-	getProduct: executeGetProduct,
-	updateProduct: executeUpdateProduct,
-	deleteProduct: executeDeleteProduct,
-
-	// Documents
-	createDocument: executeCreateDocument,
-	getDocument: executeGetDocument,
-	signDocument: executeSignDocument,
-	deleteDocument: executeDeleteDocument,
-
-	// Workflow
-	getWorkflows: executeGetWorkflows,
-	getWorkflow: executeGetWorkflow,
-	createWorkflow: executeCreateWorkflow,
-	updateWorkflow: executeUpdateWorkflow,
-	executeWorkflowAction: executeWorkflowAction,
-
-	// Event (CRM)
-	listEvents: executeListEvents,
-	getEvent: executeGetEvent,
-	createEvent: executeCreateEvent,
-	updateEvent: executeUpdateEvent,
-	addMessage: executeAddMessage,
-	deleteEvent: executeDeleteEvent,
-
 	// Cloud — Clientes
 	cloudListCustomers,
 	cloudGetCustomer,
@@ -112,3 +67,4 @@ export const operations: Record<string, OperationHandler> = {
 	cloudUpdateCurrAccount,
 	cloudDeleteCurrAccount,
 };
+

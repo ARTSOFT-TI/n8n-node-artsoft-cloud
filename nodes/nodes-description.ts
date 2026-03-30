@@ -31,12 +31,12 @@ import {
 export const NodesDescription: INodeTypeDescription = {
 	displayName: 'ARTSOFT',
 	name: 'artsoft',
-	icon: 'file:artsoft.svg',
+	icon: 'file:artsoft.png',
 	group: ['transform'],
 	version: 1,
 	usableAsTool: true,
 	subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
-	description: 'Interact with the ARTSOFT ERP via XML API',
+	description: 'Interact with the Artsoft Cloud API',
 	defaults: {
 		name: 'ARTSOFT',
 	},
