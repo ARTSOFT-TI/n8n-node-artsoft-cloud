@@ -34,6 +34,7 @@ export const cloudSalespersonOperations = [
 ];
 
 const R = 'cloudSalespersons';
+const CU = ['cloudCreateSalesperson', 'cloudUpdateSalesperson'];
 
 export const cloudSalespersonProperties: INodeProperties[] = [
 	// ══════════════════════════════════════════════════════════════════
@@ -103,17 +104,181 @@ export const cloudSalespersonProperties: INodeProperties[] = [
 	},
 
 	// ══════════════════════════════════════════════════════════════════
-	// CREATE / UPDATE — corpo (SalespersonSchema)
+	// CREATE / UPDATE — campos individuais
 	// ══════════════════════════════════════════════════════════════════
 	{
-		displayName: 'Dados do Vendedor',
-		name: 'salespersonData',
-		type: 'json',
+		displayName: 'Número',
+		name: 'salespersonNumber',
+		type: 'number',
 		required: true,
-		default: '{\n  "name": "",\n  "shortName": "",\n  "email": ""\n}',
-		displayOptions: {
-			show: { resource: [R], operation: ['cloudCreateSalesperson', 'cloudUpdateSalesperson'] },
-		},
-		description: 'Dados do vendedor no formato JSON (SalespersonSchema)',
+		default: 0,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Número sequencial do vendedor',
+	},
+	{
+		displayName: 'Nome',
+		name: 'salespersonName',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Nome completo do vendedor',
+	},
+	{
+		displayName: 'Nome Curto',
+		name: 'salespersonShortName',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Abreviatura do nome',
+	},
+	{
+		displayName: 'NIF',
+		name: 'salespersonFiscalNumber',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Número de identificação fiscal',
+	},
+	{
+		displayName: 'Email',
+		name: 'salespersonEmail',
+		type: 'string',
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Email do vendedor',
+	},
+
+	// — Morada —
+	{
+		displayName: 'Morada',
+		name: 'salespersonAddress',
+		type: 'string',
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Endereço do vendedor',
+	},
+	{
+		displayName: 'Localidade',
+		name: 'salespersonLocality',
+		type: 'string',
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Localidade',
+	},
+	{
+		displayName: 'Código Postal',
+		name: 'salespersonPostalCode',
+		type: 'string',
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Código postal (ex: 1000-001)',
+	},
+	{
+		displayName: 'Distrito',
+		name: 'salespersonDistrict',
+		type: 'number',
+		default: 0,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'ID do distrito',
+	},
+	{
+		displayName: 'Concelho',
+		name: 'salespersonCounty',
+		type: 'number',
+		default: 0,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'ID do concelho',
+	},
+	{
+		displayName: 'Freguesia',
+		name: 'salespersonParish',
+		type: 'number',
+		default: 0,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'ID da freguesia',
+	},
+	{
+		displayName: 'Região do País',
+		name: 'salespersonCountryRegionId',
+		type: 'number',
+		default: 25,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'ID da região do país',
+	},
+	{
+		displayName: 'Código do País',
+		name: 'salespersonCountryCode',
+		type: 'number',
+		default: 620,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Código do país (620 = Portugal)',
+	},
+
+	// — Campos adicionais —
+	{
+		displayName: 'Campos Adicionais',
+		name: 'salespersonAdditionalFields',
+		type: 'collection',
+		placeholder: 'Adicionar Campo',
+		default: {},
+		displayOptions: { show: { resource: [R], operation: CU } },
+		options: [
+			{
+				displayName: 'Data de Nascimento',
+				name: 'birthDate',
+				type: 'string',
+				default: '',
+				description: 'Data de nascimento (ISO 8601)',
+			},
+			{
+				displayName: 'Estado',
+				name: 'status',
+				type: 'options',
+				default: 'ACTIVE',
+				options: [
+					{ name: 'Ativo', value: 'ACTIVE' },
+					{ name: 'Inativo', value: 'INACTIVE' },
+				],
+			},
+			{
+				displayName: 'Inativo',
+				name: 'inactive',
+				type: 'boolean',
+				default: false,
+			},
+			{
+				displayName: 'Observações',
+				name: 'observation1',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'Anónimo',
+				name: 'anonymous',
+				type: 'boolean',
+				default: false,
+			},
+			{
+				displayName: 'Registo Privado',
+				name: 'privateRecord',
+				type: 'boolean',
+				default: false,
+			},
+			{
+				displayName: 'País do Telefone',
+				name: 'phoneNumberCountryId',
+				type: 'number',
+				default: 620,
+			},
+			{
+				displayName: 'País do Telemóvel',
+				name: 'mobileNumberCountryId',
+				type: 'number',
+				default: 620,
+			},
+		],
 	},
 ];

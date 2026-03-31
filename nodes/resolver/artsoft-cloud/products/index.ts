@@ -1,45 +1,61 @@
 import { IDataObject, IExecuteFunctions } from 'n8n-workflow';
 import { buildPaginationParams, cloudApiRequest } from '../GenericFunctions';
 
+function toISODate(value: string): string {
+	if (!value) return new Date().toISOString();
+	// Already ISO format
+	if (value.includes('T') || /^\d{4}-\d{2}-\d{2}/.test(value)) return new Date(value).toISOString();
+	// DD/MM/YYYY format
+	const parts = value.split('/');
+	if (parts.length === 3) return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`).toISOString();
+	return new Date(value).toISOString();
+}
+
 function buildProductPayload(context: IExecuteFunctions, i: number): IDataObject {
 	const additional = context.getNodeParameter('productAdditionalFields', i, {}) as IDataObject;
 	const now = new Date().toISOString();
 
 	// Preços
-	const pricesRaw = context.getNodeParameter('productPrices', i, {}) as IDataObject;
-	const priceValues = (pricesRaw.priceValues as IDataObject[]) ?? [];
-	const prices = priceValues.map((p) => ({
-		price: p.price as number,
-		number: p.number as number,
-		currencyId: (p.currencyId as number) ?? 1,
-		beginDate: (p.beginDate as string) || now,
-		endDate: (p.endDate as string) || now,
-	}));
+	let prices: IDataObject[] = [];
+	try {
+		const pricesRaw = context.getNodeParameter('productPrices', i, {}) as IDataObject;
+		const priceValues = (pricesRaw.priceValues as IDataObject[]) ?? [];
+		prices = priceValues.map((p) => ({
+			price: p.price as number,
+			number: p.number as number,
+			currencyId: (p.currencyId as number) ?? 1,
+			beginDate: toISODate((p.beginDate as string) || now),
+			endDate: toISODate((p.endDate as string) || now),
+		}));
+	} catch { /* campo não preenchido */ }
 
 	// Códigos opcionais
-	const codesRaw = context.getNodeParameter('productOptionalCodes', i, {}) as IDataObject;
-	const codeValues = (codesRaw.codeValues as IDataObject[]) ?? [];
-	const optionalCodes = codeValues.map((c) => ({
-		supplierId: (c.supplierId as number) ?? 1,
-		quantity: (c.quantity as number) ?? 1,
-		code: (c.code as string) ?? '',
-		optionalCodeId: (c.optionalCodeId as number) ?? 2,
-	}));
+	let optionalCodes: IDataObject[] = [];
+	try {
+		const codesRaw = context.getNodeParameter('productOptionalCodes', i, {}) as IDataObject;
+		const codeValues = (codesRaw.codeValues as IDataObject[]) ?? [];
+		optionalCodes = codeValues.map((c) => ({
+			supplierId: (c.supplierId as number) ?? 1,
+			quantity: (c.quantity as number) ?? 1,
+			code: (c.code as string) ?? '',
+			optionalCodeId: (c.optionalCodeId as number) ?? 2,
+		}));
+	} catch { /* campo não preenchido */ }
 
 	return {
 		sku: context.getNodeParameter('productSku', i) as string,
 		mainName: context.getNodeParameter('productMainName', i) as string,
-		saftClass: context.getNodeParameter('productSaftClass', i) as number,
-		vatType: context.getNodeParameter('productVatType', i) as number,
-		inventaryClass: context.getNodeParameter('productInventaryClass', i) as number,
-		status: 0,
+		saftClass: context.getNodeParameter('productSaftClass', i) as string,
+		vatType: context.getNodeParameter('productVatType', i) as string,
+		inventaryClass: context.getNodeParameter('productInventaryClass', i) as string,
+		status: 'ACTIVE',
 		quantityDecimalPlaces: context.getNodeParameter('productQuantityDecimalPlaces', i, 2) as number,
 		unitCodeId: context.getNodeParameter('productUnitCodeId', i, 5) as number,
 		warehouse: {
 			id: context.getNodeParameter('productWarehouseId', i, 1) as number,
 			retired: false,
 			suspended: false,
-			status: 0,
+			status: 'ACTIVE',
 		},
 		flags: {
 			ignoreHeaderDiscount: (additional.ignoreHeaderDiscount as boolean) ?? false,
@@ -65,20 +81,21 @@ function applyProductChanges(
 	const body = { ...current } as IDataObject;
 	const additional = context.getNodeParameter('productAdditionalFields', i, {}) as IDataObject;
 
+	// Campos texto — só sobrescreve se preenchido
 	const sku = context.getNodeParameter('productSku', i, '') as string;
 	if (sku) body.sku = sku;
 
 	const mainName = context.getNodeParameter('productMainName', i, '') as string;
 	if (mainName) body.mainName = mainName;
 
-	const saftClass = context.getNodeParameter('productSaftClass', i, undefined) as number | undefined;
-	if (saftClass !== undefined) body.saftClass = saftClass;
+	const saftClass = context.getNodeParameter('productSaftClass', i, '') as string;
+	if (saftClass) body.saftClass = saftClass;
 
-	const vatType = context.getNodeParameter('productVatType', i, undefined) as number | undefined;
-	if (vatType !== undefined) body.vatType = vatType;
+	const vatType = context.getNodeParameter('productVatType', i, '') as string;
+	if (vatType) body.vatType = vatType;
 
-	const inventaryClass = context.getNodeParameter('productInventaryClass', i, undefined) as number | undefined;
-	if (inventaryClass !== undefined) body.inventaryClass = inventaryClass;
+	const inventaryClass = context.getNodeParameter('productInventaryClass', i, '') as string;
+	if (inventaryClass) body.inventaryClass = inventaryClass;
 
 	const quantityDecimalPlaces = context.getNodeParameter('productQuantityDecimalPlaces', i, 0) as number;
 	if (quantityDecimalPlaces) body.quantityDecimalPlaces = quantityDecimalPlaces;
@@ -91,33 +108,51 @@ function applyProductChanges(
 		body.warehouse = { ...(body.warehouse as IDataObject), id: warehouseId };
 	}
 
-	// Preços — se preenchidos, substitui todos
-	const pricesRaw = context.getNodeParameter('productPrices', i, {}) as IDataObject;
-	const priceValues = (pricesRaw.priceValues as IDataObject[]) ?? [];
-	if (priceValues.length > 0) {
-		const now = new Date().toISOString();
-		body.prices = priceValues.map((p) => ({
-			price: p.price as number,
-			number: p.number as number,
-			currencyId: (p.currencyId as number) ?? 1,
-			beginDate: (p.beginDate as string) || now,
-			endDate: (p.endDate as string) || now,
-		}));
-	}
+	// Preços — mergea com os existentes (mantém id)
+	try {
+		const pricesRaw = context.getNodeParameter('productPrices', i, {}) as IDataObject;
+		const priceValues = (pricesRaw.priceValues as IDataObject[]) ?? [];
+		if (priceValues.length > 0) {
+			const now = new Date().toISOString();
+			const currentPrices = (body.prices as IDataObject[]) ?? [];
+			body.prices = priceValues.map((p) => {
+				const existing = currentPrices.find(
+					(cp) => cp.number === (p.number as number) && cp.currencyId === ((p.currencyId as number) ?? 1),
+				);
+				return {
+					...(existing ?? {}),
+					price: p.price as number,
+					number: p.number as number,
+					currencyId: (p.currencyId as number) ?? 1,
+					beginDate: toISODate((p.beginDate as string) || now),
+					endDate: toISODate((p.endDate as string) || now),
+				};
+			});
+		}
+	} catch { /* campo não preenchido */ }
 
-	// Códigos opcionais — se preenchidos, substitui todos
-	const codesRaw = context.getNodeParameter('productOptionalCodes', i, {}) as IDataObject;
-	const codeValues = (codesRaw.codeValues as IDataObject[]) ?? [];
-	if (codeValues.length > 0) {
-		body.optionalCodes = codeValues.map((c) => ({
-			supplierId: (c.supplierId as number) ?? 1,
-			quantity: (c.quantity as number) ?? 1,
-			code: (c.code as string) ?? '',
-			optionalCodeId: (c.optionalCodeId as number) ?? 2,
-		}));
-	}
+	// Códigos opcionais — mergea com os existentes (mantém id)
+	try {
+		const codesRaw = context.getNodeParameter('productOptionalCodes', i, {}) as IDataObject;
+		const codeValues = (codesRaw.codeValues as IDataObject[]) ?? [];
+		if (codeValues.length > 0) {
+			const currentCodes = (body.optionalCodes as IDataObject[]) ?? [];
+			body.optionalCodes = codeValues.map((c) => {
+				const existing = currentCodes.find(
+					(cc) => cc.supplierId === ((c.supplierId as number) ?? 1) && cc.optionalCodeId === ((c.optionalCodeId as number) ?? 2),
+				);
+				return {
+					...(existing ?? {}),
+					supplierId: (c.supplierId as number) ?? 1,
+					quantity: (c.quantity as number) ?? 1,
+					code: (c.code as string) ?? '',
+					optionalCodeId: (c.optionalCodeId as number) ?? 2,
+				};
+			});
+		}
+	} catch { /* campo não preenchido */ }
 
-	// Flags
+	// Flags — só sobrescreve os que o utilizador adicionou
 	const currentFlags = (body.flags as IDataObject) ?? {};
 	if (additional.ignoreHeaderDiscount !== undefined) currentFlags.ignoreHeaderDiscount = additional.ignoreHeaderDiscount;
 	if (additional.ignoreLineDiscount !== undefined) currentFlags.ignoreLineDiscount = additional.ignoreLineDiscount;

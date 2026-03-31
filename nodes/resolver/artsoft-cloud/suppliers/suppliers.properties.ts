@@ -34,6 +34,7 @@ export const cloudSupplierOperations = [
 ];
 
 const R = 'cloudSuppliers';
+const CU = ['cloudCreateSupplier', 'cloudUpdateSupplier'];
 
 export const cloudSupplierProperties: INodeProperties[] = [
 	// ══════════════════════════════════════════════════════════════════
@@ -100,17 +101,229 @@ export const cloudSupplierProperties: INodeProperties[] = [
 	},
 
 	// ══════════════════════════════════════════════════════════════════
-	// CREATE / UPDATE — corpo (SupplierSchema)
+	// CREATE / UPDATE — campos individuais
 	// ══════════════════════════════════════════════════════════════════
 	{
-		displayName: 'Dados do Fornecedor',
-		name: 'supplierData',
-		type: 'json',
+		displayName: 'Número',
+		name: 'supplierNumber',
+		type: 'number',
 		required: true,
-		default: '{\n  "name": "",\n  "shortName": "",\n  "isCompany": true\n}',
-		displayOptions: {
-			show: { resource: [R], operation: ['cloudCreateSupplier', 'cloudUpdateSupplier'] },
-		},
-		description: 'Dados do fornecedor no formato JSON (SupplierSchema)',
+		default: 0,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Número sequencial do fornecedor',
+	},
+	{
+		displayName: 'Nome',
+		name: 'supplierName',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Nome completo do fornecedor',
+	},
+	{
+		displayName: 'Nome Curto',
+		name: 'supplierShortName',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Abreviatura do nome',
+	},
+	{
+		displayName: 'NIF',
+		name: 'supplierFiscalNumber',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Número de identificação fiscal',
+	},
+	{
+		displayName: 'É Empresa',
+		name: 'supplierIsCompany',
+		type: 'boolean',
+		default: false,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Whether the supplier is a company',
+	},
+
+	// — Morada —
+	{
+		displayName: 'Morada',
+		name: 'supplierAddress',
+		type: 'string',
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Endereço do fornecedor',
+	},
+	{
+		displayName: 'Localidade',
+		name: 'supplierLocality',
+		type: 'string',
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Localidade',
+	},
+	{
+		displayName: 'Código Postal',
+		name: 'supplierPostalCode',
+		type: 'string',
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Código postal (ex: 1000-001)',
+	},
+	{
+		displayName: 'Distrito',
+		name: 'supplierDistrict',
+		type: 'number',
+		default: 0,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'ID do distrito',
+	},
+	{
+		displayName: 'Concelho',
+		name: 'supplierCounty',
+		type: 'number',
+		default: 0,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'ID do concelho',
+	},
+	{
+		displayName: 'Freguesia',
+		name: 'supplierParish',
+		type: 'number',
+		default: 0,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'ID da freguesia',
+	},
+	{
+		displayName: 'Região do País',
+		name: 'supplierCountryRegionId',
+		type: 'number',
+		default: 0,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'ID da região do país',
+	},
+	{
+		displayName: 'Código do País',
+		name: 'supplierCountryCode',
+		type: 'number',
+		default: 620,
+		displayOptions: { show: { resource: [R], operation: CU } },
+		description: 'Código do país (620 = Portugal)',
+	},
+
+	// — Empresa —
+	{
+		displayName: 'Nome Comercial',
+		name: 'supplierTradeName',
+		type: 'string',
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU, supplierIsCompany: [true] } },
+		description: 'Nome comercial da empresa',
+	},
+	{
+		displayName: 'EORI',
+		name: 'supplierEori',
+		type: 'string',
+		default: '',
+		displayOptions: { show: { resource: [R], operation: CU, supplierIsCompany: [true] } },
+		description: 'Número EORI',
+	},
+
+	// — Campos adicionais —
+	{
+		displayName: 'Campos Adicionais',
+		name: 'supplierAdditionalFields',
+		type: 'collection',
+		placeholder: 'Adicionar Campo',
+		default: {},
+		displayOptions: { show: { resource: [R], operation: CU } },
+		options: [
+			{
+				displayName: 'Data de Nascimento',
+				name: 'birthDate',
+				type: 'string',
+				default: '',
+				description: 'Data de nascimento (ISO 8601)',
+			},
+			{
+				displayName: 'Estado',
+				name: 'status',
+				type: 'options',
+				default: 'ACTIVE',
+				options: [
+					{ name: 'Ativo', value: 'ACTIVE' },
+					{ name: 'Inativo', value: 'INACTIVE' },
+				],
+			},
+			{
+				displayName: 'Inativo',
+				name: 'inactive',
+				type: 'boolean',
+				default: false,
+			},
+			{
+				displayName: 'ID Estado do Fornecedor',
+				name: 'supplierStatusId',
+				type: 'number',
+				default: 1,
+			},
+			{
+				displayName: 'URL',
+				name: 'url',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'SWIFT',
+				name: 'swift',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'IBAN',
+				name: 'iban',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'ID Tabela de Preços',
+				name: 'priceId',
+				type: 'number',
+				default: 0,
+			},
+			{
+				displayName: 'Observações',
+				name: 'observation1',
+				type: 'string',
+				default: '',
+			},
+			{
+				displayName: 'Anónimo',
+				name: 'anonymous',
+				type: 'boolean',
+				default: false,
+			},
+			{
+				displayName: 'Registo Privado',
+				name: 'privateRecord',
+				type: 'boolean',
+				default: false,
+			},
+			{
+				displayName: 'País do Telefone',
+				name: 'phoneNumberCountryId',
+				type: 'number',
+				default: 620,
+			},
+			{
+				displayName: 'País do Telemóvel',
+				name: 'mobileNumberCountryId',
+				type: 'number',
+				default: 620,
+			},
+		],
 	},
 ];

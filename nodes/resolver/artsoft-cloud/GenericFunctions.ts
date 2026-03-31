@@ -70,11 +70,15 @@ export async function cloudApiRequest(
 		});
 		return (response as Record<string, unknown>) ?? {};
 	} catch (error) {
-		const err = error as Error;
+		const err = error as any;
+		const responseData = err?.response?.data;
+		const apiMessage = responseData?.error?.message ?? responseData?.message ?? '';
+		const apiCode = responseData?.error?.code ?? '';
+		const detail = apiMessage ? `${apiCode}: ${apiMessage}` : err.message ?? String(err);
 		throw new NodeApiError(
 			this.getNode(),
-			{ message: err.message ?? String(err), description: err.stack ?? '' },
-			{ message: `Artsoft Cloud API request to ${path} failed` },
+			{ message: detail, description: JSON.stringify(responseData ?? err.message ?? '') },
+			{ message: `Artsoft Cloud API request to ${path} failed: ${detail}` },
 		);
 	}
 }

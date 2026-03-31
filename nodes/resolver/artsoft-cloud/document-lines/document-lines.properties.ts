@@ -121,17 +121,69 @@ export const cloudDocumentLineProperties: INodeProperties[] = [
 	},
 
 	// ══════════════════════════════════════════════════════════════════
-	// CREATE / UPDATE — corpo (DocLineCreateDto / DocLineFullDto)
+	// CREATE / UPDATE — campos individuais
 	// ══════════════════════════════════════════════════════════════════
 	{
-		displayName: 'Dados da Linha',
-		name: 'lineData',
-		type: 'json',
+		displayName: 'ID do Produto (SKU)',
+		name: 'lineIdSku',
+		type: 'number',
 		required: true,
-		default: '{\n  "idSku": 0,\n  "quantity": 1,\n  "valUn": 0\n}',
+		default: 0,
 		displayOptions: {
 			show: { resource: [R], operation: ['cloudCreateDocumentLine', 'cloudUpdateDocumentLine'] },
 		},
-		description: 'Dados da linha no formato JSON (DocLineCreateDto)',
+		description: 'ID do produto/SKU',
+	},
+	{
+		displayName: 'Quantidade',
+		name: 'lineQuantity',
+		type: 'number',
+		required: true,
+		default: 1,
+		typeOptions: { numberPrecision: 2 },
+		displayOptions: {
+			show: { resource: [R], operation: ['cloudCreateDocumentLine', 'cloudUpdateDocumentLine'] },
+		},
+		description: 'Quantidade',
+	},
+	{
+		displayName: 'Preço Unitário',
+		name: 'lineValUn',
+		type: 'number',
+		required: true,
+		default: 0,
+		typeOptions: { numberPrecision: 2 },
+		displayOptions: {
+			show: { resource: [R], operation: ['cloudCreateDocumentLine', 'cloudUpdateDocumentLine'] },
+		},
+		description: 'Valor unitário líquido',
+	},
+	{
+		displayName: 'Campos Adicionais',
+		name: 'lineAdditionalFields',
+		type: 'collection',
+		placeholder: 'Adicionar Campo',
+		default: {},
+		displayOptions: {
+			show: { resource: [R], operation: ['cloudCreateDocumentLine', 'cloudUpdateDocumentLine'] },
+		},
+		options: [
+			{
+				displayName: 'Preço Unitário Bruto',
+				name: 'valUnGross',
+				type: 'number',
+				default: 0,
+				typeOptions: { numberPrecision: 2 },
+				description: 'Valor unitário bruto (antes de descontos)',
+			},
+			{
+				displayName: 'Desconto Total (%)',
+				name: 'discountTotalPercent',
+				type: 'number',
+				default: 0,
+				typeOptions: { numberPrecision: 2 },
+				description: 'Percentagem de desconto total da linha',
+			},
+		],
 	},
 ];

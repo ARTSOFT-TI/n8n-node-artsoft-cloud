@@ -1,6 +1,21 @@
 import { IDataObject, IExecuteFunctions } from 'n8n-workflow';
 import { buildPaginationParams, cloudApiRequest } from '../GenericFunctions';
 
+function buildLinePayload(context: IExecuteFunctions, i: number): IDataObject {
+	const additional = context.getNodeParameter('lineAdditionalFields', i, {}) as IDataObject;
+
+	const body: IDataObject = {
+		idSku: context.getNodeParameter('lineIdSku', i) as number,
+		quantity: context.getNodeParameter('lineQuantity', i) as number,
+		valUn: context.getNodeParameter('lineValUn', i) as number,
+	};
+
+	if (additional.valUnGross) body.valUnGross = additional.valUnGross;
+	if (additional.discountTotalPercent) body.discountTotalPercent = additional.discountTotalPercent;
+
+	return body;
+}
+
 export async function cloudListDocumentLines(
 	this: IExecuteFunctions,
 	i: number,
@@ -25,7 +40,7 @@ export async function cloudCreateDocumentLine(
 ): Promise<Record<string, unknown>> {
 	const documentId = this.getNodeParameter('documentId', i) as string;
 	const confirmCreditLimit = this.getNodeParameter('confirmCreditLimit', i, false) as boolean;
-	const body = this.getNodeParameter('lineData', i) as IDataObject;
+	const body = buildLinePayload(this, i);
 	const qs: IDataObject = {};
 	if (confirmCreditLimit) qs.confirmCreditLimit = true;
 	return cloudApiRequest.call(this, 'POST', `/documents/${documentId}/lines`, body, qs);
@@ -38,7 +53,7 @@ export async function cloudUpdateDocumentLine(
 	const documentId = this.getNodeParameter('documentId', i) as string;
 	const lineId = this.getNodeParameter('lineId', i) as string;
 	const confirmCreditLimit = this.getNodeParameter('confirmCreditLimit', i, false) as boolean;
-	const body = this.getNodeParameter('lineData', i) as IDataObject;
+	const body = buildLinePayload(this, i);
 	const qs: IDataObject = {};
 	if (confirmCreditLimit) qs.confirmCreditLimit = true;
 	return cloudApiRequest.call(this, 'POST', `/documents/${documentId}/lines/${lineId}`, body, qs);
