@@ -1,6 +1,6 @@
 # Conta Corrente (Curr Account)
 
-Modulo de gestao de contas correntes na API ARTSOFT Cloud. Permite listar contas de clientes e fornecedores, consultar, criar debitos e creditos, atualizar e apagar lancamentos.
+Modulo de gestao de contas correntes na API ARTSOFT Cloud Invoice. Permite listar contas de clientes e fornecedores, consultar, criar debitos e creditos, atualizar e apagar lancamentos.
 
 ## Operacoes
 

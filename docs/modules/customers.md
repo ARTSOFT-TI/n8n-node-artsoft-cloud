@@ -1,6 +1,6 @@
 # Clientes (Customers)
 
-Modulo de gestao de clientes na API ARTSOFT Cloud. Permite listar, consultar, criar, atualizar e apagar clientes.
+Modulo de gestao de clientes na API ARTSOFT Cloud Invoice. Permite listar, consultar, criar, atualizar e apagar clientes.
 
 ## Operacoes
 

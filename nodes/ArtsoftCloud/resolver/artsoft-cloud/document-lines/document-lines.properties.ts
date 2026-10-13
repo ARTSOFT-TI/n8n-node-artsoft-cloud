@@ -2,34 +2,34 @@ import { INodeProperties } from 'n8n-workflow';
 
 export const cloudDocumentLineOperations = [
 	{
-		name: 'Listar',
-		value: 'cloudListDocumentLines',
-		description: 'Listar as linhas de um documento',
-		action: 'Listar linhas de documento',
-	},
-	{
-		name: 'Consultar',
-		value: 'cloudGetDocumentLine',
-		description: 'Obter uma linha específica de um documento',
-		action: 'Consultar linha de documento',
-	},
-	{
-		name: 'Criar',
+		name: 'Create',
 		value: 'cloudCreateDocumentLine',
-		description: 'Criar uma nova linha num documento',
-		action: 'Criar linha de documento',
+		description: 'Create a new line in a document',
+		action: 'Create document line',
 	},
 	{
-		name: 'Atualizar',
-		value: 'cloudUpdateDocumentLine',
-		description: 'Atualizar uma linha de um documento',
-		action: 'Atualizar linha de documento',
-	},
-	{
-		name: 'Apagar',
+		name: 'Delete',
 		value: 'cloudDeleteDocumentLine',
-		description: 'Eliminar uma linha de um documento',
-		action: 'Apagar linha de documento',
+		description: 'Delete a line from a document',
+		action: 'Delete document line',
+	},
+	{
+		name: 'Get',
+		value: 'cloudGetDocumentLine',
+		description: 'Get a specific line of a document',
+		action: 'Get document line',
+	},
+	{
+		name: 'List',
+		value: 'cloudListDocumentLines',
+		description: 'List the lines of a document',
+		action: 'List document lines',
+	},
+	{
+		name: 'Update',
+		value: 'cloudUpdateDocumentLine',
+		description: 'Update a line of a document',
+		action: 'Update document line',
 	},
 ];
 
@@ -37,10 +37,10 @@ const R = 'cloudDocumentLines';
 
 export const cloudDocumentLineProperties: INodeProperties[] = [
 	// ══════════════════════════════════════════════════════════════════
-	// SHARED — ID do documento (todas as operações)
+	// SHARED — Document ID (all operations)
 	// ══════════════════════════════════════════════════════════════════
 	{
-		displayName: 'ID do Documento',
+		displayName: 'Document ID',
 		name: 'documentId',
 		type: 'string',
 		required: true,
@@ -57,14 +57,14 @@ export const cloudDocumentLineProperties: INodeProperties[] = [
 				],
 			},
 		},
-		description: 'ID do documento pai',
+		description: 'ID of the parent document',
 	},
 
 	// ══════════════════════════════════════════════════════════════════
-	// SHARED — ID da linha
+	// SHARED — Line ID
 	// ══════════════════════════════════════════════════════════════════
 	{
-		displayName: 'ID da Linha',
+		displayName: 'Line ID',
 		name: 'lineId',
 		type: 'string',
 		required: true,
@@ -75,56 +75,56 @@ export const cloudDocumentLineProperties: INodeProperties[] = [
 				operation: ['cloudGetDocumentLine', 'cloudUpdateDocumentLine', 'cloudDeleteDocumentLine'],
 			},
 		},
-		description: 'ID da linha do documento',
+		description: 'ID of the document line',
 	},
 
 	// ══════════════════════════════════════════════════════════════════
-	// LIST — paginação simples
+	// LIST — simple pagination
 	// ══════════════════════════════════════════════════════════════════
 	{
-		displayName: 'Página',
+		displayName: 'Page',
 		name: 'page',
 		type: 'number',
 		default: 0,
 		displayOptions: { show: { resource: [R], operation: ['cloudListDocumentLines'] } },
-		description: 'Número da página (começa em 0)',
+		description: 'Page number (starts at 0)',
 	},
 	{
-		displayName: 'Tamanho da Página',
+		displayName: 'Page Size',
 		name: 'size',
 		type: 'number',
 		default: 10,
 		displayOptions: { show: { resource: [R], operation: ['cloudListDocumentLines'] } },
-		description: 'Número de resultados por página',
+		description: 'Number of results per page',
 	},
 	{
-		displayName: 'Filtro',
+		displayName: 'Filter',
 		name: 'filter',
 		type: 'string',
 		default: '',
 		displayOptions: { show: { resource: [R], operation: ['cloudListDocumentLines'] } },
-		description: 'Expressão de filtro',
+		description: 'Filter expression',
 	},
 
 	// ══════════════════════════════════════════════════════════════════
-	// CREATE / UPDATE — confirmação de limite de crédito
+	// CREATE / UPDATE — credit limit confirmation
 	// ══════════════════════════════════════════════════════════════════
 	{
-		displayName: 'Confirmar Limite de Crédito',
+		displayName: 'Confirm Credit Limit',
 		name: 'confirmCreditLimit',
 		type: 'boolean',
 		default: false,
 		displayOptions: {
 			show: { resource: [R], operation: ['cloudCreateDocumentLine', 'cloudUpdateDocumentLine'] },
 		},
-		description: 'Confirmar ultrapassagem do limite de crédito',
+		description: 'Whether to confirm exceeding the credit limit',
 	},
 
 	// ══════════════════════════════════════════════════════════════════
-	// CREATE / UPDATE — campos individuais
+	// CREATE / UPDATE — individual fields
 	// ══════════════════════════════════════════════════════════════════
 	{
-		displayName: 'ID do Produto (SKU)',
+		displayName: 'Product ID (SKU)',
 		name: 'lineIdSku',
 		type: 'number',
 		required: true,
@@ -132,10 +132,10 @@ export const cloudDocumentLineProperties: INodeProperties[] = [
 		displayOptions: {
 			show: { resource: [R], operation: ['cloudCreateDocumentLine', 'cloudUpdateDocumentLine'] },
 		},
-		description: 'ID do produto/SKU',
+		description: 'Product/SKU ID',
 	},
 	{
-		displayName: 'Quantidade',
+		displayName: 'Quantity',
 		name: 'lineQuantity',
 		type: 'number',
 		required: true,
@@ -144,10 +144,9 @@ export const cloudDocumentLineProperties: INodeProperties[] = [
 		displayOptions: {
 			show: { resource: [R], operation: ['cloudCreateDocumentLine', 'cloudUpdateDocumentLine'] },
 		},
-		description: 'Quantidade',
 	},
 	{
-		displayName: 'Preço Unitário',
+		displayName: 'Unit Price',
 		name: 'lineValUn',
 		type: 'number',
 		required: true,
@@ -156,33 +155,33 @@ export const cloudDocumentLineProperties: INodeProperties[] = [
 		displayOptions: {
 			show: { resource: [R], operation: ['cloudCreateDocumentLine', 'cloudUpdateDocumentLine'] },
 		},
-		description: 'Valor unitário líquido',
+		description: 'Net unit value',
 	},
 	{
-		displayName: 'Campos Adicionais',
+		displayName: 'Additional Fields',
 		name: 'lineAdditionalFields',
 		type: 'collection',
-		placeholder: 'Adicionar Campo',
+		placeholder: 'Add Field',
 		default: {},
 		displayOptions: {
 			show: { resource: [R], operation: ['cloudCreateDocumentLine', 'cloudUpdateDocumentLine'] },
 		},
 		options: [
 			{
-				displayName: 'Preço Unitário Bruto',
+				displayName: 'Gross Unit Price',
 				name: 'valUnGross',
 				type: 'number',
 				default: 0,
 				typeOptions: { numberPrecision: 2 },
-				description: 'Valor unitário bruto (antes de descontos)',
+				description: 'Gross unit value (before discounts)',
 			},
 			{
-				displayName: 'Desconto Total (%)',
+				displayName: 'Total Discount (%)',
 				name: 'discountTotalPercent',
 				type: 'number',
 				default: 0,
 				typeOptions: { numberPrecision: 2 },
-				description: 'Percentagem de desconto total da linha',
+				description: 'Total discount percentage of the line',
 			},
 		],
 	},

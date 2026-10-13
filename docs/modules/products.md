@@ -1,6 +1,6 @@
 # Produtos (Products)
 
-Modulo de gestao de produtos/artigos na API ARTSOFT Cloud. Permite listar, consultar, criar, atualizar e apagar produtos.
+Modulo de gestao de produtos/artigos na API ARTSOFT Cloud Invoice. Permite listar, consultar, criar, atualizar e apagar produtos.
 
 ## Operacoes
 

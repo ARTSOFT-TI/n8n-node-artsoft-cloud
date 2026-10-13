@@ -1,169 +1,100 @@
-# n8n-nodes-artsoft — Guia de Inicio Rapido
+# n8n-nodes-artsoft-cloud
 
-Community node para [n8n](https://n8n.io) que integra com a API REST do **ARTSOFT Cloud** (ERP).
-Permite automatizar operacoes de gestao (clientes, fornecedores, produtos, documentos, contas correntes) diretamente a partir de workflows n8n.
+[n8n](https://n8n.io) community node for **ARTSOFT Cloud Invoice** (by ARTSOFT Business Software). It lets workflows list, read, create, update and delete customers, suppliers, products, salespersons, documents, document lines and current account entries through the ARTSOFT Cloud Invoice REST API.
 
----
+- [Installation](#installation)
+- [Prerequisites](#prerequisites)
+- [Credentials](#credentials)
+- [Operations](#operations)
+- [Example workflow](#example-workflow)
+- [Response format](#response-format)
+- [Compatibility and limitations](#compatibility-and-limitations)
+- [Resources](#resources)
+- [Version history](#version-history)
 
-## Stack
+## Installation
 
-- **TypeScript**
-- **n8n-workflow** — Tipos e interfaces do n8n
-- **Jest** — Testes de integracao
+Follow the [n8n community nodes installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) and install the package `n8n-nodes-artsoft-cloud`.
 
-**Requisitos:**
-- [Node.js >= 18](https://nodejs.org/)
-- npm
-
----
-
-## Instalacao de dependencias
-
-```bash
-npm install
-```
-
----
-
-## Build
+For a self-hosted instance you can also install it from the command line in your n8n user folder:
 
 ```bash
-npm run build
+npm install n8n-nodes-artsoft-cloud
 ```
 
----
+## Prerequisites
 
-## Configuracao da Credential
+- An ARTSOFT Cloud Invoice subscription. Your tax ID (NIF) identifies your instance (`https://{nif}.artsoft.cloud`).
+- An ARTSOFT Cloud Invoice API key.
 
-O node utiliza a credential **ARTSOFT CLOUD API** com os seguintes campos:
+## Credentials
 
-| Campo | Descricao |
-|-------|-----------|
-| **NIF** | Numero de identificacao fiscal (usado na URL) |
-| **Chave API** | Enviada no header `x-api-key` |
-| **Development** | Alterna entre ambiente de producao e desenvolvimento |
+Create an **ARTSOFT Cloud Invoice API** credential with:
 
-### URLs geradas
+| Field | Description |
+|---|---|
+| NIF | Tax ID of your ARTSOFT Cloud Invoice instance, used to build the URL, e.g. `123456789` |
+| API Key | API key, sent in the `x-api-key` header |
+| Development | Use the development environment instead of production. Leave off unless you work against a local ARTSOFT Cloud Invoice |
 
-| Ambiente | URL |
-|----------|-----|
-| Producao | `https://{nif}.artsoft.cloud/api` |
-| Development | `http://{nif}.local.artsoft.cloud:3000/api` |
+Generated base URLs:
 
----
+| Environment | URL |
+|---|---|
+| Production | `https://{nif}.artsoft.cloud/api` |
+| Development | `http://{nif}.local.artsoft.cloud:3000/api` (plain HTTP, local use only) |
 
-## Recursos disponiveis
+The credential test calls `GET /customers/?$size=1`, so it also requires read access to customers.
 
-| Recurso | Operacoes |
-|---------|-----------|
-| **Clientes** | Listar, Consultar, Criar, Atualizar, Apagar |
-| **Fornecedores** | Listar, Consultar, Criar, Atualizar, Apagar |
-| **Produtos** | Listar, Consultar, Criar, Atualizar, Apagar |
-| **Vendedores** | Listar, Consultar, Criar, Atualizar, Apagar |
-| **Documentos** | Listar Faturas, Listar Compras, Consultar, Criar Cabecalho, Atualizar, Apagar |
-| **Linhas de Documento** | Listar, Consultar, Criar, Atualizar, Apagar |
-| **Conta Corrente** | Listar (Cliente/Fornecedor), Consultar, Criar Debito, Criar Credito, Atualizar, Apagar |
+## Operations
 
-Para documentacao detalhada de cada modulo, consulta a pasta [`docs/modules/`](docs/modules/).
+| Resource | Operations |
+|---|---|
+| **Customer** | List, Get, Create, Update, Delete |
+| **Supplier** | List, Get, Create, Update, Delete |
+| **Product** | List, Get, Create, Update, Delete |
+| **Salesperson** | List, Get, Create, Update, Delete |
+| **Document** | List Invoices, List Invoices by SAFT Type, List Purchases, List Purchases by SAFT Type, Get, Create Header, Update, Delete |
+| **Document Line** | List, Get, Create, Update, Delete |
+| **Current Account** | List Customers, List Suppliers, Get, Create Debit, Create Credit, Update, Delete |
 
----
+*List* operations accept the API paging and filtering parameters: `$search`, `$filter`, `$sort`, `$direction`, `$size`, `$cursor` and `$navigate`.
 
-## Desenvolvimento local com n8n (Docker)
+Detailed field reference per module (currently in Portuguese): [`docs/modules/`](docs/modules/).
 
-```bash
-docker run -d \
-    --name n8n \
-    --restart unless-stopped \
-    -p 5678:5678 \
-    -v "$HOME/.n8n:/home/node/.n8n" \
-    -v "/path/to/n8n-node-artsoft-cloud:/custom-nodes/n8n-node-artsoft-cloud" \
-    -e N8N_CUSTOM_EXTENSIONS="/custom-nodes" \
-    --add-host "SEUNIF.local.artsoft.cloud:SEU_IP_LOCAL" \
-    docker.n8n.io/n8nio/n8n
-```
+## Example workflow
 
-> **Nota:** O `--add-host` e necessario porque `*.local.artsoft.cloud` resolve para `127.0.0.1`, que dentro do Docker e o proprio container. Substitui `SEUNIF` pelo NIF e `SEU_IP_LOCAL` pelo IP da maquina host na rede local.
+Create a customer and then a document header for it:
 
----
+1. **ARTSOFT** node: *Customer → Create*, with the customer data. The response contains the new customer.
+2. **ARTSOFT** node: *Document → Create Header*, using an expression to pass the customer ID from step 1.
+3. **ARTSOFT** node: *Document Line → Create*, to add lines to the document.
 
-## Ficheiro Hosts
+Enable **Continue On Fail** on any step if you want the workflow to keep going when the API rejects an item.
 
-Para o ambiente de **development**, adiciona ao ficheiro `hosts`:
+## Response format
 
-```plaintext
-# Cloud Local
-127.0.0.1 login.local.artsoft.cloud
-127.0.0.1 SEUNIF.local.artsoft.cloud
-```
+The node returns the JSON answer of the ARTSOFT Cloud Invoice API as the item `json`. It sends one request per input item.
 
----
+When the API answers with an error, the item fails with a `NodeApiError` that includes the API error code and message (or it is returned as an error item when *Continue On Fail* is on).
 
-## Testes
+## Compatibility and limitations
 
-Os testes de integracao chamam a API real de desenvolvimento.
+- Requires an n8n version that supports community nodes with `n8nNodesApiVersion` 1.
+- The node is usable as an AI agent tool (`usableAsTool`).
+- The UI labels are in English. Some field descriptions mirror ARTSOFT terminology (for example *Third Party*, *SAFT*, *MB References*).
+- Parameter names and option values are kept stable between versions, so saved workflows keep working. Labels may change.
 
-### Configuracao
+## Resources
 
-Cria um ficheiro `.env` na raiz do projeto:
+- [Source code and issues](https://github.com/ARTSOFT-TI/n8n-node-artsoft-cloud)
+- [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/)
+- [ARTSOFT Cloud Invoice manual](https://artsoft-cloud.eniston.com/)
 
-```env
-ARTSOFT_NIF=seu_nif
-ARTSOFT_API_KEY=sua_api_key
-```
+## Version history
 
-### Executar
+See [CHANGELOG.md](CHANGELOG.md).
 
-```bash
-npm test
-```
+## License
 
----
-
-## Estrutura do projeto
-
-```
-├── credentials/              # Definicao da credential
-├── nodes/
-│   ├── ArtsoftCloud.node.ts  # Entry point do node
-│   ├── nodes-description.ts  # UI (recursos, operacoes, campos)
-│   └── resolver/
-│       ├── index.ts          # ArtResolver — dispatch de operacoes
-│       ├── handler.ts        # Registo de todas as operacoes
-│       └── artsoft-cloud/
-│           ├── GenericFunctions.ts  # HTTP client, URL builder, paginacao
-│           ├── customers/
-│           ├── suppliers/
-│           ├── products/
-│           ├── salespersons/
-│           ├── documents/
-│           ├── document-lines/
-│           └── curr-account/
-├── tests/                    # Testes de integracao
-├── docs/                     # Documentacao
-│   ├── overview.md
-│   └── modules/              # Doc por modulo
-├── package.json
-└── tsconfig.json
-```
-
----
-
-## Scripts disponiveis
-
-| Comando | Descricao |
-|---------|-----------|
-| `npm run build` | Compila TypeScript e copia assets |
-| `npm run dev` | Compilacao em modo watch |
-| `npm test` | Executa testes de integracao |
-| `npm run lint` | Valida com ESLint |
-| `npm run lintfix` | Corrige problemas de lint |
-| `npm run pack` | Build + cria pacote npm |
-
----
-
-## Acesso local
-
-Apos arrancar o n8n via Docker:
-
-- **n8n:** [http://localhost:5678](http://localhost:5678)
-- **ARTSOFT Cloud (dev):** `http://SEUNIF.local.artsoft.cloud:3000/`
+[MIT](LICENSE)

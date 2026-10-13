@@ -45,6 +45,13 @@ export function buildPaginationParams(context: IExecuteFunctions, i: number): ID
 	return params;
 }
 
+interface ApiErrorShape {
+	message?: string;
+	response?: {
+		data?: { message?: string; error?: { message?: string; code?: string } };
+	};
+}
+
 export async function cloudApiRequest(
 	this: IExecuteFunctions,
 	method: 'GET' | 'POST' | 'PUT' | 'DELETE',
@@ -56,11 +63,10 @@ export async function cloudApiRequest(
 	const baseUrl = getBaseUrl(credentials);
 
 	try {
-		const response = await this.helpers.httpRequest({
+		const response = await this.helpers.httpRequestWithAuthentication.call(this, 'artsoftCloudApi', {
 			method,
 			url: `${baseUrl}${path}`,
 			headers: {
-				'x-api-key': credentials.apiKey,
 				'Content-Type': 'application/json',
 				Accept: 'application/json',
 			},
@@ -70,15 +76,15 @@ export async function cloudApiRequest(
 		});
 		return (response as Record<string, unknown>) ?? {};
 	} catch (error) {
-		const err = error as any;
+		const err = error as ApiErrorShape;
 		const responseData = err?.response?.data;
 		const apiMessage = responseData?.error?.message ?? responseData?.message ?? '';
 		const apiCode = responseData?.error?.code ?? '';
-		const detail = apiMessage ? `${apiCode}: ${apiMessage}` : err.message ?? String(err);
+		const detail = apiMessage ? `${apiCode}: ${apiMessage}` : err.message ?? String(error);
 		throw new NodeApiError(
 			this.getNode(),
 			{ message: detail, description: JSON.stringify(responseData ?? err.message ?? '') },
-			{ message: `Artsoft Cloud API request to ${path} failed: ${detail}` },
+			{ message: `ARTSOFT Cloud Invoice API request to ${path} failed: ${detail}` },
 		);
 	}
 }

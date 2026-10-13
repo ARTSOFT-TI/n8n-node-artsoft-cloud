@@ -1,6 +1,6 @@
 # Linhas de Documento (Document Lines)
 
-Modulo de gestao de linhas de documentos na API ARTSOFT Cloud. Permite listar, consultar, criar, atualizar e apagar linhas dentro de um documento existente.
+Modulo de gestao de linhas de documentos na API ARTSOFT Cloud Invoice. Permite listar, consultar, criar, atualizar e apagar linhas dentro de um documento existente.
 
 ## Operacoes
 

@@ -114,7 +114,7 @@ export async function cloudCreateCurrAccountEntry(
 				return entry;
 			});
 		}
-	} catch { /* não preenchido */ }
+	} catch { /* not set */ }
 
 	return cloudApiRequest.call(this, 'POST', '/curr-account/entry', body);
 }
@@ -190,7 +190,7 @@ export async function cloudUpdateCurrAccount(
 				return entry;
 			});
 		}
-	} catch { /* não preenchido */ }
+	} catch { /* not set */ }
 
 	// currAccEntryVat
 	try {
@@ -207,7 +207,7 @@ export async function cloudUpdateCurrAccount(
 				return entry;
 			});
 		}
-	} catch { /* não preenchido */ }
+	} catch { /* not set */ }
 
 	body.existingTaxData = [];
 

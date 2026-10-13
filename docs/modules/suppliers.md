@@ -1,6 +1,6 @@
 # Fornecedores (Suppliers)
 
-Modulo de gestao de fornecedores na API ARTSOFT Cloud. Permite listar, consultar, criar, atualizar e apagar fornecedores.
+Modulo de gestao de fornecedores na API ARTSOFT Cloud Invoice. Permite listar, consultar, criar, atualizar e apagar fornecedores.
 
 ## Operacoes
 

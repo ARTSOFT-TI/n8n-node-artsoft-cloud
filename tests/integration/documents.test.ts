@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { apiRequest } from '../helpers/api-client';
 
 describe('Documents — Integration', () => {

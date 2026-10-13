@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { apiRequest } from '../helpers/api-client';
 
 function makeCustomerPayload(number: number, nif: string, name: string, shortName: string) {

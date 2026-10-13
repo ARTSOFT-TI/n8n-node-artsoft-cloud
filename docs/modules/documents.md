@@ -1,6 +1,6 @@
 # Documentos (Documents)
 
-Modulo de gestao de documentos de faturacao e compras na API ARTSOFT Cloud. Permite listar faturas/compras, consultar, criar cabecalhos, atualizar e apagar documentos.
+Modulo de gestao de documentos de faturacao e compras na API ARTSOFT Cloud Invoice. Permite listar faturas/compras, consultar, criar cabecalhos, atualizar e apagar documentos.
 
 ## Operacoes
 

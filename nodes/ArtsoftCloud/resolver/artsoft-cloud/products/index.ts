@@ -27,7 +27,7 @@ function buildProductPayload(context: IExecuteFunctions, i: number): IDataObject
 			beginDate: toISODate((p.beginDate as string) || now),
 			endDate: toISODate((p.endDate as string) || now),
 		}));
-	} catch { /* campo não preenchido */ }
+	} catch { /* field not set */ }
 
 	// Códigos opcionais
 	let optionalCodes: IDataObject[] = [];
@@ -40,7 +40,7 @@ function buildProductPayload(context: IExecuteFunctions, i: number): IDataObject
 			code: (c.code as string) ?? '',
 			optionalCodeId: (c.optionalCodeId as number) ?? 2,
 		}));
-	} catch { /* campo não preenchido */ }
+	} catch { /* field not set */ }
 
 	return {
 		sku: context.getNodeParameter('productSku', i) as string,
@@ -129,7 +129,7 @@ function applyProductChanges(
 				};
 			});
 		}
-	} catch { /* campo não preenchido */ }
+	} catch { /* field not set */ }
 
 	// Códigos opcionais — mergea com os existentes (mantém id)
 	try {
@@ -150,7 +150,7 @@ function applyProductChanges(
 				};
 			});
 		}
-	} catch { /* campo não preenchido */ }
+	} catch { /* field not set */ }
 
 	// Flags — só sobrescreve os que o utilizador adicionou
 	const currentFlags = (body.flags as IDataObject) ?? {};

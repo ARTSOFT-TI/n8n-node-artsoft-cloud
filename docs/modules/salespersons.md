@@ -1,6 +1,6 @@
 # Vendedores (Salespersons)
 
-Modulo de gestao de vendedores na API ARTSOFT Cloud. Permite listar, consultar, criar, atualizar e apagar vendedores.
+Modulo de gestao de vendedores na API ARTSOFT Cloud Invoice. Permite listar, consultar, criar, atualizar e apagar vendedores.
 
 ## Operacoes
 

@@ -1,0 +1,14 @@
+{
+	"node": "n8n-nodes-artsoft-cloud.artsoftCloud",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Miscellaneous"],
+	"resources": {
+		"credentialDocumentation": [
+			{ "url": "https://artsoft-cloud.eniston.com/" }
+		],
+		"primaryDocumentation": [
+			{ "url": "https://github.com/ARTSOFT-TI/n8n-node-artsoft-cloud#readme" }
+		]
+	}
+}

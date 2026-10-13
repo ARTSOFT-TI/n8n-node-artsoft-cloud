@@ -1,8 +1,8 @@
-# n8n-nodes-artsoft — Overview
+# n8n-nodes-artsoft-cloud — Overview
 
 ## O que é
 
-Community node para [n8n](https://n8n.io) que integra com a API REST do **ARTSOFT Cloud** (ERP). Permite automatizar operações de gestão (clientes, fornecedores, produtos, documentos, contas correntes) diretamente a partir de workflows n8n.
+Community node para [n8n](https://n8n.io) que integra com a API REST do **ARTSOFT Cloud Invoice**. Permite automatizar operações de gestão (clientes, fornecedores, produtos, documentos, contas correntes) diretamente a partir de workflows n8n.
 
 ## Recursos disponíveis
 
@@ -18,7 +18,7 @@ Community node para [n8n](https://n8n.io) que integra com a API REST do **ARTSOF
 
 ## Autenticação
 
-Utiliza a credential **ARTSOFT CLOUD API** com:
+Utiliza a credential **ARTSOFT Cloud Invoice API** com:
 
 - **NIF** — Número de identificação fiscal (usado para construir a URL base)
 - **Chave API** — Enviada no header `x-api-key`
@@ -40,10 +40,11 @@ Utiliza a credential **ARTSOFT CLOUD API** com:
 ## Estrutura do projeto
 
 ```
-├── credentials/              # Definição da credential
-├── nodes/
-│   ├── ArtsoftCloud.node.ts  # Entry point do node
-│   ├── nodes-description.ts  # UI do node (recursos, operações, campos)
+├── credentials/              # ArtsoftCloudApi.credentials.ts (x-api-key + teste)
+├── nodes/ArtsoftCloud/
+│   ├── ArtsoftCloud.node.ts  # Node: descricao da UI (recursos, operacoes, campos) + execute
+│   ├── ArtsoftCloud.node.json # Codex (categorias e documentacao)
+│   ├── artsoft.svg           # Icone
 │   └── resolver/
 │       ├── index.ts          # ArtResolver — dispatch de operações
 │       ├── handler.ts        # Registo de todas as operações
@@ -57,6 +58,8 @@ Utiliza a credential **ARTSOFT CLOUD API** com:
 │           ├── document-lines/      # Linhas de documento
 │           └── curr-account/        # Conta corrente
 ├── tests/                    # Testes de integração
+├── .github/workflows/        # CI (lint + build) e publicacao npm com provenance
+├── eslint.config.mjs         # Config oficial @n8n/node-cli (nao alterar: modo strict)
 ├── package.json
 └── tsconfig.json
 ```
