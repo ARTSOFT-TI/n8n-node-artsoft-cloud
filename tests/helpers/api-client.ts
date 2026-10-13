@@ -7,7 +7,7 @@ dotenv.config();
 
 const NIF = process.env.ARTSOFT_NIF!;
 const API_KEY = process.env.ARTSOFT_API_KEY!;
-const BASE_URL = `http://${NIF}.local.artsoft.cloud:3000/api`;
+const BASE_URL = `https://${NIF}.local.artsoft.cloud:3000/api`;
 
 export interface ApiResponse {
 	status: number;
@@ -43,6 +43,8 @@ export async function apiRequest(
 				port: parsed.port || (isHttps ? 443 : 80),
 				path: parsed.pathname + parsed.search,
 				method,
+				// Tests only target the local development server (certificate from a local CA).
+				rejectUnauthorized: false,
 				headers: {
 					'x-api-key': API_KEY,
 					'Content-Type': 'application/json',

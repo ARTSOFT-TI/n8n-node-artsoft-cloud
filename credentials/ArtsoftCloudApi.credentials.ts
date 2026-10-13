@@ -6,7 +6,7 @@ import type {
 } from 'n8n-workflow';
 
 const BASE_URL_EXPRESSION =
-	"={{$credentials.development ? 'http://' + $credentials.nif + '.local.artsoft.cloud:3000/api' : 'https://' + $credentials.nif + '.artsoft.cloud/api'}}";
+	"={{$credentials.development ? 'https://' + $credentials.nif + '.local.artsoft.cloud:3000/api' : 'https://' + $credentials.nif + '.artsoft.cloud/api'}}";
 
 export class ArtsoftCloudApi implements ICredentialType {
 	name = 'artsoftCloudApi';
@@ -56,6 +56,7 @@ export class ArtsoftCloudApi implements ICredentialType {
 			url: '/customers/',
 			method: 'GET',
 			qs: { $size: 1 },
+			skipSslCertificateValidation: '={{$credentials.development}}',
 		},
 	};
 }

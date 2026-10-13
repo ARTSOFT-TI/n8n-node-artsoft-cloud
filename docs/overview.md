@@ -29,7 +29,7 @@ Utiliza a credential **ARTSOFT Cloud Invoice API** com:
 | Ambiente | URL |
 |----------|-----|
 | Produção | `https://{nif}.artsoft.cloud/api` |
-| Development | `http://{nif}.local.artsoft.cloud:3000/api` |
+| Development | `https://{nif}.local.artsoft.cloud:3000/api` |
 
 ## Stack
 

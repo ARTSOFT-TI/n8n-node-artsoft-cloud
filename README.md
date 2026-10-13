@@ -42,7 +42,7 @@ Generated base URLs:
 | Environment | URL |
 |---|---|
 | Production | `https://{nif}.artsoft.cloud/api` |
-| Development | `http://{nif}.local.artsoft.cloud:3000/api` (plain HTTP, local use only) |
+| Development | `https://{nif}.local.artsoft.cloud:3000/api` (local use only; TLS certificate validation is skipped in this mode, so local CAs such as mkcert work without extra setup) |
 
 The credential test calls `GET /customers/?$size=1`, so it also requires read access to customers.
 

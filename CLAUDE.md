@@ -20,7 +20,7 @@ npm run release    # n8n-node release (CI publishes with npm provenance on tag p
 
 ## Architecture
 
-- `credentials/ArtsoftCloudApi.credentials.ts` — `artsoftCloudApi`: `nif`, `apiKey`, `development`. Auth via `authenticate` (`x-api-key` header); the credential `test` calls `GET /customers/?$size=1` (assumption, confirm against the API docs). Base URL: `https://{nif}.artsoft.cloud/api` (production), `http://{nif}.local.artsoft.cloud:3000/api` (development).
+- `credentials/ArtsoftCloudApi.credentials.ts` — `artsoftCloudApi`: `nif`, `apiKey`, `development`. Auth via `authenticate` (`x-api-key` header); the credential `test` calls `GET /customers/?$size=1` (assumption, confirm against the API docs). Base URL: `https://{nif}.artsoft.cloud/api` (production), `https://{nif}.local.artsoft.cloud:3000/api` (development).
 - `nodes/ArtsoftCloud/ArtsoftCloud.node.ts` — node class (`name: artsoftCloud`): UI description + `execute`.
 - `nodes/ArtsoftCloud/resolver/` — `ArtResolver` dispatches an operation to the per-resource handlers in `artsoft-cloud/{customers,suppliers,products,salespersons,documents,document-lines,curr-account}`.
 - `nodes/ArtsoftCloud/resolver/artsoft-cloud/GenericFunctions.ts` — `cloudApiRequest` (uses `httpRequestWithAuthentication`), URL builder and pagination params.

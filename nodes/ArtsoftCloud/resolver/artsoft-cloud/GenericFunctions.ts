@@ -7,7 +7,7 @@ export interface CloudCredentials {
 }
 
 const PRODUCTION_BASE_URL = 'https://%s.artsoft.cloud/api';
-const DEVELOPMENT_BASE_URL = 'http://%s.local.artsoft.cloud:3000/api';
+const DEVELOPMENT_BASE_URL = 'https://%s.local.artsoft.cloud:3000/api';
 
 export function getBaseUrl(credentials: CloudCredentials): string {
 	const template = credentials.development ? DEVELOPMENT_BASE_URL : PRODUCTION_BASE_URL;
@@ -72,6 +72,8 @@ export async function cloudApiRequest(
 			},
 			body,
 			qs,
+			// Local development servers use certificates from a local CA (e.g. mkcert).
+			skipSslCertificateValidation: credentials.development,
 			returnFullResponse: false,
 		});
 		return (response as Record<string, unknown>) ?? {};
