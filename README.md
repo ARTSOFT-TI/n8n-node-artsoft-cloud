@@ -62,6 +62,8 @@ The credential test calls `GET /customers/?$size=1`, so it also requires read ac
 
 Detailed field reference per module (currently in Portuguese): [`docs/modules/`](docs/modules/).
 
+End-user manual (Portuguese, non-technical): [`docs/manual-utilizador/`](docs/manual-utilizador/README.md).
+
 ## Example workflow
 
 Create a customer and then a document header for it:
