@@ -7,7 +7,7 @@ Antes de usar o node, tem de dizer ao n8n **qual é a sua conta ARTSOFT** e **co
 | Dado | Onde obter |
 |------|-----------|
 | **NIF** da sua instância ARTSOFT Cloud Invoice | É o NIF com que a conta está registada (o mesmo que aparece no endereço `https://NIF.artsoft.cloud`). |
-| **API Key** (chave de acesso) | Fornecida pelo administrador da sua conta ARTSOFT Cloud Invoice ou pela ARTSOFT. *(O caminho exato para a gerar depende do produto; confirme no manual do ARTSOFT Cloud Invoice.)* |
+| **API Key** (chave de acesso) | Criada por si nas **configurações da Empresa**, na sua conta do ARTSOFT Cloud. Se não tiver acesso a essas configurações, peça ao administrador da conta. |
 
 > **Segurança:** a chave de acesso funciona como uma palavra-passe. Não a partilhe por email nem a escreva em notas dos fluxos. O n8n guarda-a de forma protegida dentro da credencial.
 
@@ -37,7 +37,7 @@ O teste faz a leitura de **um cliente** da sua conta. Por isso, a chave tem de t
 |------------------|----------------|
 | Erro de autorização / acesso recusado | Chave de acesso incorreta, expirada, ou sem permissões. |
 | Não encontra o endereço / tempo esgotado | NIF mal escrito, ou o servidor não está acessível a partir do n8n. |
-| Falha só no teste, mas a chave só deve gerir documentos | A chave não tem permissão de leitura de clientes. Peça essa permissão. |
+| Falha só no teste, mas a chave só deve gerir documentos | A chave não tem permissão de leitura de clientes. Verifique as permissões da chave nas configurações da Empresa. |
 
 Veja mais em [Problemas frequentes](12-problemas-frequentes.md).
 

@@ -43,7 +43,7 @@ Este manual explica como instalar, configurar e utilizar o *node* **ARTSOFT** no
 - Uma instância n8n (n8n Cloud ou instalação própria) onde tenha permissões para instalar *community nodes* (normalmente o proprietário ou um administrador).
 - Uma subscrição ARTSOFT Cloud Invoice ativa.
 - O **NIF** com que a sua instância ARTSOFT Cloud Invoice está registada.
-- Uma **chave de acesso** (*API Key*) do ARTSOFT Cloud Invoice. Se não a tiver, peça-a ao administrador da sua conta ou à ARTSOFT.
+- Uma **chave de acesso** (*API Key*) do ARTSOFT Cloud Invoice. Cria-se nas configurações da Empresa, na sua conta do ARTSOFT Cloud (ver [Configuração](02-configuracao.md)).
 
 ## Limitações
 

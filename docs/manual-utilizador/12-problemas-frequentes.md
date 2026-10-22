@@ -4,7 +4,7 @@
 |----------|----------------|-------------|
 | O node **ARTSOFT** não aparece na pesquisa | Node não instalado ou n8n não reiniciado (instalação própria) | Verifique em **Settings → Community nodes**. Em instalação própria, reinicie o n8n. |
 | Não vejo **Community nodes** nas definições | Funcionalidade desativada ou sem permissões | Peça a um administrador do n8n. |
-| O teste da credencial falha | NIF ou chave incorretos; chave sem permissão de ler clientes; servidor inacessível | Confirme o NIF (só números), gere/peça nova chave e confirme as permissões. |
+| O teste da credencial falha | NIF ou chave incorretos; chave sem permissão de ler clientes; servidor inacessível | Confirme o NIF (só números), crie uma nova chave nas configurações da Empresa e confirme as permissões. |
 | Erro `ARTSOFT Cloud Invoice API request to … failed` seguido de uma mensagem | O ARTSOFT recusou o pedido | Leia a mensagem: normalmente indica o campo ou regra em falta (NIF inválido, série inexistente, registo não encontrado…). |
 | `ARTSOFT error: …` | O ARTSOFT respondeu com um código de erro | Anote o código/mensagem e confirme os dados enviados. |
 | **Get/Update/Delete** diz que o registo não existe | O **ID** está errado (por exemplo, usou o **Number** ou o NIF) | Use **List** para descobrir o ID correto. |
