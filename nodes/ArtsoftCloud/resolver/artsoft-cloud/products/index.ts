@@ -1,5 +1,5 @@
 import { IDataObject, IExecuteFunctions } from 'n8n-workflow';
-import { buildPaginationParams, cloudApiRequest } from '../GenericFunctions';
+import { cloudApiRequest, cloudApiRequestAllItems } from '../GenericFunctions';
 
 function toISODate(value: string): string {
 	if (!value) return new Date().toISOString();
@@ -170,9 +170,8 @@ function applyProductChanges(
 export async function cloudListProducts(
 	this: IExecuteFunctions,
 	i: number,
-): Promise<Record<string, unknown>> {
-	const qs = buildPaginationParams(this, i);
-	return cloudApiRequest.call(this, 'GET', '/products/', undefined, qs);
+): Promise<IDataObject[]> {
+	return cloudApiRequestAllItems.call(this, '/products/', i);
 }
 
 export async function cloudGetProduct(

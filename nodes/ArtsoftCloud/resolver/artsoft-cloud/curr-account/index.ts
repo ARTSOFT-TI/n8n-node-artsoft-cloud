@@ -1,5 +1,5 @@
 import { IDataObject, IExecuteFunctions } from 'n8n-workflow';
-import { buildPaginationParams, cloudApiRequest } from '../GenericFunctions';
+import { cloudApiRequest, cloudApiRequestAllItems } from '../GenericFunctions';
 
 function toDateStr(value: string): string {
 	if (!value) return new Date().toISOString().split('T')[0];
@@ -71,17 +71,15 @@ function buildRegulList(context: IExecuteFunctions, i: number): IDataObject[] {
 export async function cloudListCustomerAccounts(
 	this: IExecuteFunctions,
 	i: number,
-): Promise<Record<string, unknown>> {
-	const qs = buildPaginationParams(this, i);
-	return cloudApiRequest.call(this, 'GET', '/curr-account/customer', undefined, qs);
+): Promise<IDataObject[]> {
+	return cloudApiRequestAllItems.call(this, '/curr-account/customer', i);
 }
 
 export async function cloudListSupplierAccounts(
 	this: IExecuteFunctions,
 	i: number,
-): Promise<Record<string, unknown>> {
-	const qs = buildPaginationParams(this, i);
-	return cloudApiRequest.call(this, 'GET', '/curr-account/supplier', undefined, qs);
+): Promise<IDataObject[]> {
+	return cloudApiRequestAllItems.call(this, '/curr-account/supplier', i);
 }
 
 export async function cloudGetCurrAccount(

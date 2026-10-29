@@ -1,5 +1,5 @@
 import { IDataObject, IExecuteFunctions } from 'n8n-workflow';
-import { buildPaginationParams, cloudApiRequest } from '../GenericFunctions';
+import { cloudApiRequest, cloudApiRequestAllItems } from '../GenericFunctions';
 
 function buildSalespersonPayload(context: IExecuteFunctions, i: number): IDataObject {
 	const additional = context.getNodeParameter('salespersonAdditionalFields', i, {}) as IDataObject;
@@ -113,9 +113,8 @@ function applySalespersonChanges(
 export async function cloudListSalespersons(
 	this: IExecuteFunctions,
 	i: number,
-): Promise<Record<string, unknown>> {
-	const qs = buildPaginationParams(this, i);
-	return cloudApiRequest.call(this, 'GET', '/salespersons/', undefined, qs);
+): Promise<IDataObject[]> {
+	return cloudApiRequestAllItems.call(this, '/salespersons/', i);
 }
 
 export async function cloudGetSalesperson(

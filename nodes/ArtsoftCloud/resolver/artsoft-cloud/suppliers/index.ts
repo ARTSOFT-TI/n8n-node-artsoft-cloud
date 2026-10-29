@@ -1,5 +1,5 @@
 import { IDataObject, IExecuteFunctions } from 'n8n-workflow';
-import { buildPaginationParams, cloudApiRequest } from '../GenericFunctions';
+import { cloudApiRequest, cloudApiRequestAllItems } from '../GenericFunctions';
 
 function buildSupplierPayload(context: IExecuteFunctions, i: number): IDataObject {
 	const additional = context.getNodeParameter('supplierAdditionalFields', i, {}) as IDataObject;
@@ -137,9 +137,8 @@ function applySupplierChanges(
 export async function cloudListSuppliers(
 	this: IExecuteFunctions,
 	i: number,
-): Promise<Record<string, unknown>> {
-	const qs = buildPaginationParams(this, i);
-	return cloudApiRequest.call(this, 'GET', '/suppliers/', undefined, qs);
+): Promise<IDataObject[]> {
+	return cloudApiRequestAllItems.call(this, '/suppliers/', i);
 }
 
 export async function cloudGetSupplier(

@@ -1,38 +1,34 @@
 import { IDataObject, IExecuteFunctions } from 'n8n-workflow';
-import { buildPaginationParams, cloudApiRequest } from '../GenericFunctions';
+import { cloudApiRequest, cloudApiRequestAllItems } from '../GenericFunctions';
 
 export async function cloudListBillings(
 	this: IExecuteFunctions,
 	i: number,
-): Promise<Record<string, unknown>> {
-	const qs = buildPaginationParams(this, i);
-	return cloudApiRequest.call(this, 'GET', '/documents/billings', undefined, qs);
+): Promise<IDataObject[]> {
+	return cloudApiRequestAllItems.call(this, '/documents/billings', i);
 }
 
 export async function cloudListBillingsBySaftType(
 	this: IExecuteFunctions,
 	i: number,
-): Promise<Record<string, unknown>> {
+): Promise<IDataObject[]> {
 	const saftType = this.getNodeParameter('saftType', i) as string;
-	const qs = buildPaginationParams(this, i);
-	return cloudApiRequest.call(this, 'GET', `/documents/billings/${saftType}`, undefined, qs);
+	return cloudApiRequestAllItems.call(this, `/documents/billings/${saftType}`, i);
 }
 
 export async function cloudListPurchases(
 	this: IExecuteFunctions,
 	i: number,
-): Promise<Record<string, unknown>> {
-	const qs = buildPaginationParams(this, i);
-	return cloudApiRequest.call(this, 'GET', '/documents/purchases', undefined, qs);
+): Promise<IDataObject[]> {
+	return cloudApiRequestAllItems.call(this, '/documents/purchases', i);
 }
 
 export async function cloudListPurchasesBySaftType(
 	this: IExecuteFunctions,
 	i: number,
-): Promise<Record<string, unknown>> {
+): Promise<IDataObject[]> {
 	const saftType = this.getNodeParameter('saftType', i) as string;
-	const qs = buildPaginationParams(this, i);
-	return cloudApiRequest.call(this, 'GET', `/documents/purchases/${saftType}`, undefined, qs);
+	return cloudApiRequestAllItems.call(this, `/documents/purchases/${saftType}`, i);
 }
 
 export async function cloudGetDocument(

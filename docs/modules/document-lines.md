@@ -25,11 +25,10 @@ Modulo de gestao de linhas de documentos na API ARTSOFT Cloud Invoice. Permite l
 
 | Campo | Tipo | Descricao |
 |-------|------|-----------|
-| page | number | Numero da pagina (comeca em 0) |
-| size | number | Numero de resultados por pagina (default: 10) |
-| filter | string | Expressao de filtro |
+| returnAll | boolean | Devolve todos os resultados (o node percorre as paginas internamente) |
+| limit | number | Maximo de resultados a devolver (default: 50; so aparece se `returnAll` estiver desligado) |
 
-**Nota:** Ao contrario dos outros modulos, a listagem de linhas usa `page`, `size` e `filter` em vez de `$search`, `$size`, `$sort` e `$direction`.
+**Nota:** o endpoint `GET /documents/{id}/lines` nao e paginado (devolve todas as linhas) e ignora `page`, `size` e `filter`. O node aplica `limit` localmente.
 
 ## Campos para Criar / Atualizar
 

@@ -1,4 +1,5 @@
 import { INodeProperties } from 'n8n-workflow';
+import { returnAllProperties } from '../GenericFunctions';
 
 export const cloudProductOperations = [
 	{
@@ -71,14 +72,7 @@ export const cloudProductProperties: INodeProperties[] = [
 		displayOptions: { show: { resource: [R], operation: ['cloudListProducts'] } },
 		description: 'Filter expression',
 	},
-	{
-		displayName: 'Page Size',
-		name: '$size',
-		type: 'number',
-		default: 10,
-		displayOptions: { show: { resource: [R], operation: ['cloudListProducts'] } },
-		description: 'Number of results per page',
-	},
+	...returnAllProperties(R, ['cloudListProducts']),
 	{
 		displayName: 'Sort By',
 		name: '$sort',

@@ -58,7 +58,7 @@ The credential test calls `GET /customers/?$size=1`, so it also requires read ac
 | **Document Line** | List, Get, Create, Update, Delete |
 | **Current Account** | List Customers, List Suppliers, Get, Create Debit, Create Credit, Update, Delete |
 
-*List* operations accept the API paging and filtering parameters: `$search`, `$filter`, `$sort`, `$direction`, `$size`, `$cursor` and `$navigate`.
+*List* operations accept `$search`, `$filter`, `$sort` and `$direction`, plus **Return All** and **Limit**. The node walks the API pages internally and returns one item per record.
 
 Detailed field reference per module (currently in Portuguese): [`docs/modules/`](docs/modules/).
 

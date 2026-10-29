@@ -22,7 +22,8 @@ Modulo de gestao de contas correntes na API ARTSOFT Cloud Invoice. Permite lista
 |-------|------|-----------|
 | $search | string | Termo de pesquisa |
 | $filter | string | Expressao de filtro |
-| $size | number | Numero de resultados por pagina (default: 10) |
+| returnAll | boolean | Devolve todos os resultados (o node percorre as paginas internamente) |
+| limit | number | Maximo de resultados a devolver (default: 50; so aparece se `returnAll` estiver desligado) |
 | $sort | string | Campo de ordenacao |
 | $direction | options | Direcao da ordenacao (asc/desc) |
 

@@ -1,4 +1,10 @@
-import { IDataObject, IExecuteFunctions, NodeApiError } from 'n8n-workflow';
+import {
+	IDataObject,
+	IExecuteFunctions,
+	INodeProperties,
+	NodeApiError,
+	NodeOperationError,
+} from 'n8n-workflow';
 
 export interface CloudCredentials {
 	nif: string;
@@ -17,30 +23,50 @@ export function getBaseUrl(credentials: CloudCredentials): string {
 export interface PaginationParams {
 	$search?: string;
 	$direction?: string;
-	$size?: number;
 	$sort?: string;
 	$filter?: string;
-	$navigate?: string;
-	$cursor?: string;
+}
+
+// The API caps `$size` at 200 (MAX_LIMIT in the backend specifications).
+const MAX_PAGE_SIZE = 200;
+// Guards against a cursor that never ends.
+const MAX_PAGES = 1000;
+
+export function returnAllProperties(resource: string, operations: string[]): INodeProperties[] {
+	return [
+		{
+			displayName: 'Return All',
+			name: 'returnAll',
+			type: 'boolean',
+			default: false,
+			displayOptions: { show: { resource: [resource], operation: operations } },
+			description: 'Whether to return all results or only up to a given limit',
+		},
+		{
+			displayName: 'Limit',
+			name: 'limit',
+			type: 'number',
+			default: 50,
+			typeOptions: { minValue: 1 },
+			displayOptions: {
+				show: { resource: [resource], operation: operations, returnAll: [false] },
+			},
+			description: 'Max number of results to return',
+		},
+	];
 }
 
 export function buildPaginationParams(context: IExecuteFunctions, i: number): IDataObject {
 	const params: IDataObject = {};
 	const search = context.getNodeParameter('$search', i, '') as string;
 	const direction = context.getNodeParameter('$direction', i, '') as string;
-	const size = context.getNodeParameter('$size', i, 0) as number;
 	const sort = context.getNodeParameter('$sort', i, '') as string;
 	const filter = context.getNodeParameter('$filter', i, '') as string;
-	const navigate = context.getNodeParameter('$navigate', i, '') as string;
-	const cursor = context.getNodeParameter('$cursor', i, '') as string;
 
 	if (search) params.$search = search;
 	if (direction) params.$direction = direction;
-	if (size) params.$size = size;
 	if (sort) params.$sort = sort;
 	if (filter) params.$filter = filter;
-	if (navigate) params.$navigate = navigate;
-	if (cursor) params.$cursor = cursor;
 
 	return params;
 }
@@ -89,4 +115,41 @@ export async function cloudApiRequest(
 			{ message: `ARTSOFT Cloud Invoice API request to ${path} failed: ${detail}` },
 		);
 	}
+}
+
+/**
+ * Walks a cursor-paginated list endpoint (`{ value, nextToken }`) until the limit is
+ * reached or there are no more pages.
+ */
+export async function cloudApiRequestAllItems(
+	this: IExecuteFunctions,
+	path: string,
+	i: number,
+): Promise<IDataObject[]> {
+	const returnAll = this.getNodeParameter('returnAll', i, false) as boolean;
+	const limit = returnAll ? Infinity : (this.getNodeParameter('limit', i, 50) as number);
+	const baseQs = buildPaginationParams(this, i);
+	const results: IDataObject[] = [];
+	let cursor: string | undefined;
+
+	for (let page = 0; page < MAX_PAGES; page++) {
+		const qs: IDataObject = { ...baseQs, $size: Math.min(limit - results.length, MAX_PAGE_SIZE) };
+		if (cursor) qs.$cursor = cursor;
+
+		const response = await cloudApiRequest.call(this, 'GET', path, undefined, qs);
+		const items = (response.value as IDataObject[] | undefined) ?? [];
+		results.push(...items);
+
+		const nextToken = response.nextToken as string | undefined;
+		if (results.length >= limit || !nextToken || items.length === 0) {
+			return results.slice(0, limit);
+		}
+		cursor = nextToken;
+	}
+
+	throw new NodeOperationError(
+		this.getNode(),
+		`Pagination stopped after ${MAX_PAGES} pages; narrow the results with a filter.`,
+		{ itemIndex: i },
+	);
 }

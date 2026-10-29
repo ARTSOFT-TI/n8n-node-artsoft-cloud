@@ -1,4 +1,4 @@
-import { IExecuteFunctions } from 'n8n-workflow';
+import { IDataObject, IExecuteFunctions } from 'n8n-workflow';
 import { cloudListCustomers, cloudGetCustomer, cloudCreateCustomer, cloudUpdateCustomer, cloudDeleteCustomer } from './artsoft-cloud/customers';
 import { cloudListSuppliers, cloudGetSupplier, cloudCreateSupplier, cloudUpdateSupplier, cloudDeleteSupplier } from './artsoft-cloud/suppliers';
 import { cloudListProducts, cloudGetProduct, cloudCreateProduct, cloudUpdateProduct, cloudDeleteProduct } from './artsoft-cloud/products';
@@ -10,7 +10,7 @@ import { cloudListCustomerAccounts, cloudListSupplierAccounts, cloudGetCurrAccou
 export type OperationHandler = (
 	this: IExecuteFunctions,
 	i: number,
-) => Promise<Record<string, unknown>>;
+) => Promise<Record<string, unknown> | IDataObject[]>;
 
 export const operations: Record<string, OperationHandler> = {
 	// Cloud — Clientes
