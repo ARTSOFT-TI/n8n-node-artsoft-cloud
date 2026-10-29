@@ -1,0 +1,22 @@
+{
+	"method": "POST",
+	"url": "/curr-account/entry",
+	"body": {
+		"idSerie": 1,
+		"idThirdParty": 2,
+		"valCurrAcc": 100,
+		"fiscalNumber": "999",
+		"balance": 50,
+		"docDate": "2026-02-02",
+		"comment": "c",
+		"docReference": "ref",
+		"vencDate": "2026-03-03",
+		"toRegulList": [],
+		"currAccEntryVat": [
+			{
+				"vatType": "NORMAL",
+				"vatBase": 100
+			}
+		]
+	}
+}

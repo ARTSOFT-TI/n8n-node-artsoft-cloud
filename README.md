@@ -58,7 +58,21 @@ The credential test calls `GET /customers/?$size=1`, so it also requires read ac
 | **Document Line** | List, Get, Create, Update, Delete |
 | **Current Account** | List Customers, List Suppliers, Get, Create Debit, Create Credit, Update, Delete |
 
-*List* operations accept `$search`, `$filter`, `$sort` and `$direction`, plus **Return All** and **Limit**. The node walks the API pages internally and returns one item per record.
+*List* operations expose **Return All**, **Limit** and a **Filters** collection (`search`, `filter`, `sort`, `direction`). The node walks the API pages internally and returns one item per record.
+
+On *Create* and *Update* operations only the required fields are shown by default; every optional field lives in the **Additional Fields** collection. On *Update*, only the fields you add to that collection are changed.
+
+### Migrating from 2.x
+
+Workflows built with 2.x need to be reviewed, because parameters that moved are **not migrated automatically** (n8n ignores values that no longer exist, without an error):
+
+| Change | What to do |
+|---|---|
+| *List* operations return one item per record instead of one item holding `{ "value": [...] }` | Replace expressions such as `{{ $json.value[0] }}` with `{{ $json.name }}` |
+| **Page Size** (`$size`) was replaced by **Return All** / **Limit** | Set **Limit**, or turn on **Return All** |
+| `$search`, `$filter`, `$sort` and `$direction` moved into **Filters** | Add them again under **Filters** |
+| Optional fields on *Create* / *Update* (e.g. Email, Address, Postal Code, Country Code, Trade Name, EORI, Is Company, Tax/Inventory class, Sign, Comment) moved into **Additional Fields** | Add them again under **Additional Fields** |
+| *Document Line → List*: **Page**, **Page Size** and **Filter** were removed (the API ignored them) | Use **Return All** / **Limit** |
 
 Detailed field reference per module (currently in Portuguese): [`docs/modules/`](docs/modules/).
 

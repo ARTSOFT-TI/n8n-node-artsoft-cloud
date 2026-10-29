@@ -16,14 +16,22 @@ Modulo de gestao de vendedores na API ARTSOFT Cloud Invoice. Permite listar, con
 
 | Campo | Tipo | Descricao |
 |-------|------|-----------|
-| $search | string | Termo de pesquisa |
-| $filter | string | Expressao de filtro |
+| filters | collection | Filtros opcionais: `search`, `filter`, `sort`, `direction` (ver abaixo) |
 | returnAll | boolean | Devolve todos os resultados (o node percorre as paginas internamente) |
 | limit | number | Maximo de resultados a devolver (default: 50; so aparece se `returnAll` estiver desligado) |
-| $sort | string | Campo de ordenacao |
-| $direction | options | Direcao da ordenacao (asc/desc) |
+
+### Filtros (colecao opcional)
+
+| Campo | Tipo | Default | Descricao |
+|-------|------|---------|-----------|
+| search | string | '' | Termo de pesquisa |
+| filter | string | '' | Expressao de filtro |
+| sort | string | '' | Campo de ordenacao |
+| direction | options | asc | Direcao da ordenacao (asc/desc) |
 
 ## Campos para Criar / Atualizar
+
+Os campos opcionais ficam na colecao **Additional Fields** (em branco por defeito). Na atualizacao, so sao alterados os campos que forem adicionados a colecao.
 
 ### Campos Principais (obrigatorios na criacao)
 
@@ -33,20 +41,6 @@ Modulo de gestao de vendedores na API ARTSOFT Cloud Invoice. Permite listar, con
 | salespersonName | string | Sim | Nome completo do vendedor |
 | salespersonShortName | string | Sim | Abreviatura do nome |
 | salespersonFiscalNumber | string | Sim | NIF - Numero de identificacao fiscal |
-| salespersonEmail | string | Nao | Email do vendedor |
-
-### Morada
-
-| Campo | Tipo | Obrigatorio | Descricao |
-|-------|------|-------------|-----------|
-| salespersonAddress | string | Nao | Endereco do vendedor |
-| salespersonLocality | string | Nao | Localidade |
-| salespersonPostalCode | string | Nao | Codigo postal (ex: 1000-001) |
-| salespersonDistrict | number | Nao | ID do distrito |
-| salespersonCounty | number | Nao | ID do concelho |
-| salespersonParish | number | Nao | ID da freguesia |
-| salespersonCountryRegionId | number | Nao | ID da regiao do pais (default: 25) |
-| salespersonCountryCode | number | Nao | Codigo do pais (default: 620 = Portugal) |
 
 ### Campos Adicionais (colecao opcional)
 
@@ -60,6 +54,15 @@ Modulo de gestao de vendedores na API ARTSOFT Cloud Invoice. Permite listar, con
 | privateRecord | boolean | false | Registo privado |
 | phoneNumberCountryId | number | 620 | Codigo do pais do telefone |
 | mobileNumberCountryId | number | 620 | Codigo do pais do telemovel |
+| email | string | '' | Email do vendedor |
+| address | string | '' | Endereco do vendedor |
+| locality | string | '' | Localidade |
+| postalCode | string | '' | Codigo postal (ex: 1000-001) |
+| district | number | 0 | ID do distrito |
+| county | number | 0 | ID do concelho |
+| parish | number | 0 | ID da freguesia |
+| countryRegionId | number | 25 | ID da regiao do pais |
+| countryCode | number | 620 | Codigo do pais (620 = Portugal) |
 
 ## Comportamento Especial
 

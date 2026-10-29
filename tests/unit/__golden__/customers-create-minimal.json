@@ -1,0 +1,63 @@
+{
+	"method": "POST",
+	"url": "/customers/",
+	"body": {
+		"number": 8,
+		"name": "Cliente Dois",
+		"shortName": "CD",
+		"birthDate": "",
+		"status": "ACTIVE",
+		"inactive": false,
+		"isCompany": false,
+		"inactivationDate": "2026-01-15T10:00:00.000Z",
+		"flags": {},
+		"email": "",
+		"documentDeliveryEmail": "",
+		"mainAddress": {
+			"name": "",
+			"status": "ACTIVE",
+			"parish": 0,
+			"county": 0,
+			"district": 0,
+			"postalCodeNumeric": "",
+			"countryCode": 620,
+			"countryRegionId": 0,
+			"address": "",
+			"locality": ""
+		},
+		"taxPayer": {
+			"fiscalNumber": "999999991",
+			"countryCode": 620,
+			"status": 0,
+			"valid": true
+		},
+		"companyDetails": {
+			"eori": "",
+			"tradeName": ""
+		},
+		"customerStatusId": 1,
+		"exemptVatId": "",
+		"expeditionModeId": "",
+		"addresses": [],
+		"staffs": [],
+		"salespersons": [],
+		"observations": {
+			"observation1": ""
+		},
+		"url": "",
+		"seriesIds": [],
+		"createdAt": "2026-01-15T10:00:00.000Z",
+		"updatedAt": "2026-01-15T10:00:00.000Z",
+		"createdBy": 0,
+		"updatedBy": 0,
+		"creditLimit": "",
+		"discount": "",
+		"noMbReferences": false,
+		"phoneNumberCountryId": 620,
+		"mobileNumberCountryId": 620,
+		"anonymous": false,
+		"privateRecord": false,
+		"concealmentReason": null,
+		"thirdPartyCAEList": []
+	}
+}

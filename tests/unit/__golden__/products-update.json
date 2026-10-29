@@ -1,0 +1,22 @@
+{
+	"method": "PUT",
+	"url": "/products/4",
+	"body": {
+		"id": 4,
+		"sku": "P-1",
+		"mainName": "Novo nome",
+		"saftClass": "SAFT_SERV",
+		"vatType": "ISENTO",
+		"inventaryClass": "MATERIAS_PRIMAS",
+		"unitCodeId": 3,
+		"quantityDecimalPlaces": 4,
+		"warehouse": {
+			"id": 2,
+			"retired": false
+		},
+		"flags": {},
+		"prices": [],
+		"optionalCodes": [],
+		"obs": "y"
+	}
+}

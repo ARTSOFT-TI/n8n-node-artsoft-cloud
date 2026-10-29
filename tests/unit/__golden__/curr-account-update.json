@@ -1,0 +1,13 @@
+{
+	"method": "POST",
+	"url": "/curr-account/8",
+	"body": {
+		"comment": "novo",
+		"docReference": "R2",
+		"valCurrAcc": 75,
+		"balance": 25,
+		"docDate": "2026-04-04",
+		"isSigned": true,
+		"existingTaxData": []
+	}
+}

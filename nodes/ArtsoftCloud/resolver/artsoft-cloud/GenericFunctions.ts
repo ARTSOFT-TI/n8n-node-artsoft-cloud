@@ -56,17 +56,59 @@ export function returnAllProperties(resource: string, operations: string[]): INo
 	];
 }
 
-export function buildPaginationParams(context: IExecuteFunctions, i: number): IDataObject {
-	const params: IDataObject = {};
-	const search = context.getNodeParameter('$search', i, '') as string;
-	const direction = context.getNodeParameter('$direction', i, '') as string;
-	const sort = context.getNodeParameter('$sort', i, '') as string;
-	const filter = context.getNodeParameter('$filter', i, '') as string;
+export function filtersProperty(resource: string, operations: string[]): INodeProperties {
+	return {
+		displayName: 'Filters',
+		name: 'filters',
+		type: 'collection',
+		placeholder: 'Add Filter',
+		default: {},
+		displayOptions: { show: { resource: [resource], operation: operations } },
+		options: [
+			{
+				displayName: 'Direction',
+				name: 'direction',
+				type: 'options',
+				default: 'asc',
+				options: [
+					{ name: 'Ascending', value: 'asc' },
+					{ name: 'Descending', value: 'desc' },
+				],
+				description: 'Sort direction',
+			},
+			{
+				displayName: 'Filter',
+				name: 'filter',
+				type: 'string',
+				default: '',
+				description: 'Filter expression',
+			},
+			{
+				displayName: 'Search',
+				name: 'search',
+				type: 'string',
+				default: '',
+				description: 'Search term',
+			},
+			{
+				displayName: 'Sort By',
+				name: 'sort',
+				type: 'string',
+				default: '',
+				description: 'Field to sort by',
+			},
+		],
+	};
+}
 
-	if (search) params.$search = search;
-	if (direction) params.$direction = direction;
-	if (sort) params.$sort = sort;
-	if (filter) params.$filter = filter;
+export function buildPaginationParams(context: IExecuteFunctions, i: number): IDataObject {
+	const filters = context.getNodeParameter('filters', i, {}) as IDataObject;
+	const params: IDataObject = {};
+
+	if (filters.search) params.$search = filters.search;
+	if (filters.direction) params.$direction = filters.direction;
+	if (filters.sort) params.$sort = filters.sort;
+	if (filters.filter) params.$filter = filters.filter;
 
 	return params;
 }

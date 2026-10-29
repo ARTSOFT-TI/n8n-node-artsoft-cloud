@@ -1,0 +1,26 @@
+{
+	"method": "PUT",
+	"url": "/suppliers/6",
+	"body": {
+		"id": 6,
+		"name": "Novo",
+		"shortName": "O",
+		"number": 1,
+		"taxPayer": {
+			"fiscalNumber": "1",
+			"countryCode": 620
+		},
+		"mainAddress": {
+			"address": "Nova",
+			"name": "Nova",
+			"countryCode": 620,
+			"locality": "Faro"
+		},
+		"companyDetails": {
+			"tradeName": "Novo Lda",
+			"eori": "PT9"
+		},
+		"isCompany": true,
+		"swift": "ABC"
+	}
+}

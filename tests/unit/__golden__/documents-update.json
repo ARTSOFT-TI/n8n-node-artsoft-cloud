@@ -1,0 +1,19 @@
+{
+	"method": "POST",
+	"url": "/documents/12",
+	"qs": {
+		"sign": true
+	},
+	"body": {
+		"comment": "c",
+		"idVatTypeExemption": 2,
+		"total": {
+			"discountPercent": 5
+		},
+		"financialInfo": {
+			"docReference": "R1",
+			"idPayCond": 4,
+			"idSalesPerson": 9
+		}
+	}
+}

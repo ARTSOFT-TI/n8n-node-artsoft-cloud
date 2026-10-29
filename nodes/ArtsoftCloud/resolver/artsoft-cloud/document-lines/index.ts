@@ -42,10 +42,10 @@ export async function cloudCreateDocumentLine(
 	i: number,
 ): Promise<Record<string, unknown>> {
 	const documentId = this.getNodeParameter('documentId', i) as string;
-	const confirmCreditLimit = this.getNodeParameter('confirmCreditLimit', i, false) as boolean;
+	const additional = this.getNodeParameter('lineAdditionalFields', i, {}) as IDataObject;
 	const body = buildLinePayload(this, i);
 	const qs: IDataObject = {};
-	if (confirmCreditLimit) qs.confirmCreditLimit = true;
+	if (additional.confirmCreditLimit) qs.confirmCreditLimit = true;
 	return cloudApiRequest.call(this, 'POST', `/documents/${documentId}/lines`, body, qs);
 }
 
@@ -55,10 +55,10 @@ export async function cloudUpdateDocumentLine(
 ): Promise<Record<string, unknown>> {
 	const documentId = this.getNodeParameter('documentId', i) as string;
 	const lineId = this.getNodeParameter('lineId', i) as string;
-	const confirmCreditLimit = this.getNodeParameter('confirmCreditLimit', i, false) as boolean;
+	const additional = this.getNodeParameter('lineAdditionalFields', i, {}) as IDataObject;
 	const body = buildLinePayload(this, i);
 	const qs: IDataObject = {};
-	if (confirmCreditLimit) qs.confirmCreditLimit = true;
+	if (additional.confirmCreditLimit) qs.confirmCreditLimit = true;
 	return cloudApiRequest.call(this, 'POST', `/documents/${documentId}/lines/${lineId}`, body, qs);
 }
 

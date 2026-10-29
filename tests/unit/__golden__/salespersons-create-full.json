@@ -1,0 +1,49 @@
+{
+	"method": "POST",
+	"url": "/salespersons/",
+	"body": {
+		"number": 2,
+		"name": "Vend Um",
+		"shortName": "VU",
+		"email": "v@x.pt",
+		"birthDate": "",
+		"status": "ACTIVE",
+		"inactive": false,
+		"countryCode": "620",
+		"countryRegionId": "25",
+		"taxPayer": {
+			"fiscalNumber": "999999994",
+			"countryCode": 620,
+			"status": 0,
+			"valid": true
+		},
+		"mainAddress": {
+			"name": "Rua C 3",
+			"status": "ACTIVE",
+			"address": "Rua C 3",
+			"postalCodeNumeric": "4700-001",
+			"locality": "Braga",
+			"countryCode": 620,
+			"countryRegionId": 25,
+			"parish": 5,
+			"county": 4,
+			"district": 3,
+			"addressNumber": 0,
+			"hasCurrentAccount": false,
+			"latitude": 0,
+			"longitude": 0,
+			"validUntil": "2026-01-15T10:00:00.000Z",
+			"addressSubunit": "",
+			"postalCodeAlpha": "",
+			"localId": 0
+		},
+		"observations": {
+			"observation1": "obs"
+		},
+		"phoneNumberCountryId": 620,
+		"mobileNumberCountryId": 620,
+		"anonymous": false,
+		"privateRecord": false,
+		"concealmentReason": null
+	}
+}

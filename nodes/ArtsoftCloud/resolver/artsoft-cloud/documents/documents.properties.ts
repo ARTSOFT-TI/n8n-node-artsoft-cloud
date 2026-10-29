@@ -1,5 +1,5 @@
 import { INodeProperties } from 'n8n-workflow';
-import { returnAllProperties } from '../GenericFunctions';
+import { filtersProperty, returnAllProperties } from '../GenericFunctions';
 
 export const cloudDocumentOperations = [
 	{
@@ -102,43 +102,8 @@ export const cloudDocumentProperties: INodeProperties[] = [
 	// ══════════════════════════════════════════════════════════════════
 	// LIST — pagination
 	// ══════════════════════════════════════════════════════════════════
-	{
-		displayName: 'Search',
-		name: '$search',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: listOps } },
-		description: 'Search term',
-	},
-	{
-		displayName: 'Filter',
-		name: '$filter',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: listOps } },
-		description: 'Filter expression',
-	},
+	filtersProperty(R, listOps),
 	...returnAllProperties(R, listOps),
-	{
-		displayName: 'Sort By',
-		name: '$sort',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: listOps } },
-		description: 'Sort field',
-	},
-	{
-		displayName: 'Direction',
-		name: '$direction',
-		type: 'options',
-		default: 'asc',
-		options: [
-			{ name: 'Ascending', value: 'asc' },
-			{ name: 'Descending', value: 'desc' },
-		],
-		displayOptions: { show: { resource: [R], operation: listOps } },
-		description: 'Sort direction',
-	},
 
 	// ══════════════════════════════════════════════════════════════════
 	// CREATE HEADER — DocumCreateSchema
@@ -153,20 +118,42 @@ export const cloudDocumentProperties: INodeProperties[] = [
 		description: 'ID of the document configuration series',
 	},
 	{
-		displayName: 'Third Party ID',
-		name: 'idThirdParty',
-		type: 'number',
-		default: 0,
+		displayName: 'Additional Fields',
+		name: 'documentAdditionalFields',
+		type: 'collection',
+		placeholder: 'Add Field',
+		default: {},
 		displayOptions: { show: { resource: [R], operation: ['cloudCreateDocumentHeader'] } },
-		description: 'ID of the customer or supplier. Ignored if Tax ID is filled in.',
-	},
-	{
-		displayName: 'Tax ID (VAT/NIF)',
-		name: 'fiscalNumber',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: ['cloudCreateDocumentHeader'] } },
-		description: 'Tax ID (VAT/NIF), used when the third party ID is not available',
+		options: [
+			{
+				displayName: 'Create Third Party Automatically',
+				name: 'createThirdParty',
+				type: 'boolean',
+				default: false,
+				description: 'Whether to create a new third party if the Tax ID does not exist in the system',
+			},
+			{
+				displayName: 'Document Date',
+				name: 'docDate',
+				type: 'dateTime',
+				default: '',
+				description: 'Document date (ISO format)',
+			},
+			{
+				displayName: 'Tax ID (VAT/NIF)',
+				name: 'fiscalNumber',
+				type: 'string',
+				default: '',
+				description: 'Tax ID (VAT/NIF), used when the third party ID is not available',
+			},
+			{
+				displayName: 'Third Party ID',
+				name: 'idThirdParty',
+				type: 'number',
+				default: 0,
+				description: 'ID of the customer or supplier. Ignored if Tax ID is filled in.',
+			},
+		],
 	},
 	{
 		displayName: 'Warehouse ID',
@@ -176,74 +163,62 @@ export const cloudDocumentProperties: INodeProperties[] = [
 		default: 1,
 		displayOptions: { show: { resource: [R], operation: ['cloudCreateDocumentHeader'] } },
 	},
-	{
-		displayName: 'Create Third Party Automatically',
-		name: 'createThirdParty',
-		type: 'boolean',
-		default: false,
-		displayOptions: { show: { resource: [R], operation: ['cloudCreateDocumentHeader'] } },
-		description: 'Whether to create a new third party if the Tax ID does not exist in the system',
-	},
-	{
-		displayName: 'Document Date',
-		name: 'docDate',
-		type: 'dateTime',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: ['cloudCreateDocumentHeader'] } },
-		description: 'Document date (ISO format)',
-	},
 
 	// ══════════════════════════════════════════════════════════════════
 	// UPDATE — DocumentDto + query param sign
 	// ══════════════════════════════════════════════════════════════════
 	{
-		displayName: 'Sign on Update',
-		name: 'sign',
-		type: 'boolean',
-		default: false,
+		displayName: 'Additional Fields',
+		name: 'documentUpdateFields',
+		type: 'collection',
+		placeholder: 'Add Field',
+		default: {},
 		displayOptions: { show: { resource: [R], operation: ['cloudUpdateDocument'] } },
-		description: 'Whether to sign the document after the update',
-	},
-	{
-		displayName: 'Comment',
-		name: 'documentComment',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: ['cloudUpdateDocument'] } },
-		description: 'Document comment / remark',
-	},
-	{
-		displayName: 'Document Reference',
-		name: 'documentDocReference',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: ['cloudUpdateDocument'] } },
-		description: 'Document reference (financialInfo.docReference)',
-	},
-	{
-		displayName: 'Payment Condition ID',
-		name: 'documentIdPayCond',
-		type: 'number',
-		default: 0,
-		displayOptions: { show: { resource: [R], operation: ['cloudUpdateDocument'] } },
-		description: 'Payment condition ID (financialInfo.idPayCond)',
-	},
-	{
-		displayName: 'VAT Exemption ID',
-		name: 'documentIdVatTypeExemption',
-		type: 'number',
-		default: 0,
-		displayOptions: { show: { resource: [R], operation: ['cloudUpdateDocument'] } },
-		description: 'ID of the VAT exemption type',
-	},
-	{
-		displayName: 'Discount (%)',
-		name: 'documentDiscountPercent',
-		type: 'number',
-		default: 0,
-		displayOptions: { show: { resource: [R], operation: ['cloudUpdateDocument'] } },
-		description: 'Global discount percentage (total.discountPercent)',
-		typeOptions: { numberPrecision: 2 },
+		options: [
+			{
+				displayName: 'Comment',
+				name: 'comment',
+				type: 'string',
+				default: '',
+				description: 'Document comment / remark',
+			},
+			{
+				displayName: 'Discount (%)',
+				name: 'discountPercent',
+				type: 'number',
+				default: 0,
+				description: 'Global discount percentage (total.discountPercent)',
+				typeOptions: { numberPrecision: 2 },
+			},
+			{
+				displayName: 'Document Reference',
+				name: 'docReference',
+				type: 'string',
+				default: '',
+				description: 'Document reference (financialInfo.docReference)',
+			},
+			{
+				displayName: 'Payment Condition ID',
+				name: 'idPayCond',
+				type: 'number',
+				default: 0,
+				description: 'Payment condition ID (financialInfo.idPayCond)',
+			},
+			{
+				displayName: 'Sign on Update',
+				name: 'sign',
+				type: 'boolean',
+				default: false,
+				description: 'Whether to sign the document after the update',
+			},
+			{
+				displayName: 'VAT Exemption ID',
+				name: 'idVatTypeExemption',
+				type: 'number',
+				default: 0,
+				description: 'ID of the VAT exemption type',
+			},
+		],
 	},
 
 	// ══════════════════════════════════════════════════════════════════

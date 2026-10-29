@@ -1,0 +1,11 @@
+{
+	"method": "POST",
+	"url": "/curr-account/entry",
+	"body": {
+		"idSerie": 1,
+		"idThirdParty": 2,
+		"valCurrAcc": 100,
+		"docDate": "2026-01-15",
+		"toRegulList": []
+	}
+}

@@ -32,6 +32,8 @@ Modulo de gestao de linhas de documentos na API ARTSOFT Cloud Invoice. Permite l
 
 ## Campos para Criar / Atualizar
 
+Os campos opcionais ficam na colecao **Additional Fields** (em branco por defeito). Na atualizacao, so sao alterados os campos que forem adicionados a colecao.
+
 ### Campos Principais (obrigatorios)
 
 | Campo | Tipo | Obrigatorio | Descricao |
@@ -46,14 +48,9 @@ Modulo de gestao de linhas de documentos na API ARTSOFT Cloud Invoice. Permite l
 |-------|------|---------|-----------|
 | valUnGross | number | 0 | Valor unitario bruto (antes de descontos) |
 | discountTotalPercent | number | 0 | Percentagem de desconto total da linha |
-
-### Limite de Credito
-
-| Campo | Tipo | Default | Descricao |
-|-------|------|---------|-----------|
 | confirmCreditLimit | boolean | false | Confirmar ultrapassagem do limite de credito |
 
-O parametro `confirmCreditLimit` e enviado como query parameter (`?confirmCreditLimit=true`), nao no corpo do pedido. Aplica-se tanto a criacao como a atualizacao.
+O campo `confirmCreditLimit` e enviado como query parameter (`?confirmCreditLimit=true`), nao no corpo do pedido. Aplica-se tanto a criacao como a atualizacao.
 
 ## Comportamento Especial
 

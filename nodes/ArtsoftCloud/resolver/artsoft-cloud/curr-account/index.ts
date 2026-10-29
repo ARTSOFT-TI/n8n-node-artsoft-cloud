@@ -18,22 +18,13 @@ function buildCurrAccountPayload(context: IExecuteFunctions, i: number): IDataOb
 		valCurrAcc: context.getNodeParameter('caValCurrAcc', i) as number,
 	};
 
-	const fiscalNumber = context.getNodeParameter('caFiscalNumber', i, '') as string;
-	if (fiscalNumber) body.fiscalNumber = fiscalNumber;
-
-	const balance = context.getNodeParameter('caBalance', i, 0) as number;
-	if (balance) body.balance = balance;
-
-	const docDateRaw = context.getNodeParameter('caDocDate', i, '') as string;
-	body.docDate = toDateStr(docDateRaw);
-
-	const comment = context.getNodeParameter('caComment', i, '') as string;
-	if (comment) body.comment = comment;
-
-	const docReference = context.getNodeParameter('caDocReference', i, '') as string;
-	if (docReference) body.docReference = docReference;
+	body.docDate = toDateStr((additional.docDate as string) ?? '');
 
 	// Campos adicionais
+	if (additional.fiscalNumber !== undefined) body.fiscalNumber = additional.fiscalNumber;
+	if (additional.balance !== undefined) body.balance = additional.balance;
+	if (additional.comment !== undefined) body.comment = additional.comment;
+	if (additional.docReference !== undefined) body.docReference = additional.docReference;
 	if (additional.vencDate) body.vencDate = toDateStr(additional.vencDate as string);
 	if (additional.payDate) body.payDate = toDateStr(additional.payDate as string);
 	if (additional.isTotalManualMode !== undefined) body.isTotalManualMode = additional.isTotalManualMode;
@@ -136,19 +127,11 @@ export async function cloudUpdateCurrAccount(
 
 	const body: IDataObject = {};
 
-	const comment = this.getNodeParameter('caUpdateComment', i, '') as string;
-	if (comment) body.comment = comment;
-
-	const docReference = this.getNodeParameter('caUpdateDocReference', i, '') as string;
-	if (docReference) body.docReference = docReference;
-
-	const valCurrAcc = this.getNodeParameter('caUpdateValCurrAcc', i, 0) as number;
-	if (valCurrAcc) body.valCurrAcc = valCurrAcc;
-
-	const balance = this.getNodeParameter('caUpdateBalance', i, 0) as number;
-	if (balance) body.balance = balance;
-
 	// Campos adicionais
+	if (additional.comment !== undefined) body.comment = additional.comment;
+	if (additional.docReference !== undefined) body.docReference = additional.docReference;
+	if (additional.valCurrAcc !== undefined) body.valCurrAcc = additional.valCurrAcc;
+	if (additional.balance !== undefined) body.balance = additional.balance;
 	if (additional.docDate) body.docDate = toDateStr(additional.docDate as string);
 	if (additional.vencDate) body.vencDate = toDateStr(additional.vencDate as string);
 	if (additional.payDate) body.payDate = toDateStr(additional.payDate as string);

@@ -1,0 +1,63 @@
+{
+	"method": "POST",
+	"url": "/customers/",
+	"body": {
+		"number": 7,
+		"name": "Cliente Um",
+		"shortName": "CU",
+		"birthDate": "1990-01-01",
+		"status": "ACTIVE",
+		"inactive": false,
+		"isCompany": true,
+		"inactivationDate": "2026-01-15T10:00:00.000Z",
+		"flags": {},
+		"email": "a@b.pt",
+		"documentDeliveryEmail": "",
+		"mainAddress": {
+			"name": "",
+			"status": "ACTIVE",
+			"parish": 3,
+			"county": 6,
+			"district": 11,
+			"postalCodeNumeric": "1000-001",
+			"countryCode": 620,
+			"countryRegionId": 25,
+			"address": "Rua A 1",
+			"locality": "Lisboa"
+		},
+		"taxPayer": {
+			"fiscalNumber": "999999990",
+			"countryCode": 620,
+			"status": 0,
+			"valid": true
+		},
+		"companyDetails": {
+			"eori": "PT123",
+			"tradeName": "Um Lda"
+		},
+		"customerStatusId": 1,
+		"exemptVatId": "",
+		"expeditionModeId": "",
+		"addresses": [],
+		"staffs": [],
+		"salespersons": [],
+		"observations": {
+			"observation1": "nota"
+		},
+		"url": "",
+		"seriesIds": [],
+		"createdAt": "2026-01-15T10:00:00.000Z",
+		"updatedAt": "2026-01-15T10:00:00.000Z",
+		"createdBy": 0,
+		"updatedBy": 0,
+		"creditLimit": "",
+		"discount": "",
+		"noMbReferences": false,
+		"phoneNumberCountryId": 620,
+		"mobileNumberCountryId": 620,
+		"anonymous": false,
+		"privateRecord": false,
+		"concealmentReason": null,
+		"thirdPartyCAEList": []
+	}
+}

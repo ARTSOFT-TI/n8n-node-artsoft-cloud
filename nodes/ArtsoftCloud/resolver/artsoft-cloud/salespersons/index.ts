@@ -3,14 +3,14 @@ import { cloudApiRequest, cloudApiRequestAllItems } from '../GenericFunctions';
 
 function buildSalespersonPayload(context: IExecuteFunctions, i: number): IDataObject {
 	const additional = context.getNodeParameter('salespersonAdditionalFields', i, {}) as IDataObject;
-	const countryCode = context.getNodeParameter('salespersonCountryCode', i, 620) as number;
-	const countryRegionId = context.getNodeParameter('salespersonCountryRegionId', i, 25) as number;
+	const countryCode = (additional.countryCode as number) ?? 620;
+	const countryRegionId = (additional.countryRegionId as number) ?? 25;
 
 	return {
 		number: context.getNodeParameter('salespersonNumber', i) as number,
 		name: context.getNodeParameter('salespersonName', i) as string,
 		shortName: context.getNodeParameter('salespersonShortName', i) as string,
-		email: context.getNodeParameter('salespersonEmail', i, '') as string,
+		email: (additional.email as string) ?? '',
 		birthDate: (additional.birthDate as string) ?? '',
 		status: (additional.status as string) ?? 'ACTIVE',
 		inactive: (additional.inactive as boolean) ?? false,
@@ -23,16 +23,16 @@ function buildSalespersonPayload(context: IExecuteFunctions, i: number): IDataOb
 			valid: true,
 		},
 		mainAddress: {
-			name: context.getNodeParameter('salespersonAddress', i, '') as string,
+			name: (additional.address as string) ?? '',
 			status: 'ACTIVE',
-			address: context.getNodeParameter('salespersonAddress', i, '') as string,
-			postalCodeNumeric: context.getNodeParameter('salespersonPostalCode', i, '') as string,
-			locality: context.getNodeParameter('salespersonLocality', i, '') as string,
+			address: (additional.address as string) ?? '',
+			postalCodeNumeric: (additional.postalCode as string) ?? '',
+			locality: (additional.locality as string) ?? '',
 			countryCode,
 			countryRegionId,
-			parish: context.getNodeParameter('salespersonParish', i, 0) as number,
-			county: context.getNodeParameter('salespersonCounty', i, 0) as number,
-			district: context.getNodeParameter('salespersonDistrict', i, 0) as number,
+			parish: (additional.parish as number) ?? 0,
+			county: (additional.county as number) ?? 0,
+			district: (additional.district as number) ?? 0,
 			addressNumber: 0,
 			hasCurrentAccount: false,
 			latitude: 0,
@@ -68,33 +68,26 @@ function applySalespersonChanges(
 	const number = context.getNodeParameter('salespersonNumber', i, 0) as number;
 	if (number) body.number = number;
 
-	const email = context.getNodeParameter('salespersonEmail', i, '') as string;
-	if (email) body.email = email;
+	if (additional.email !== undefined) body.email = additional.email;
 
 	const fiscalNumber = context.getNodeParameter('salespersonFiscalNumber', i, '') as string;
 	if (fiscalNumber) {
 		body.taxPayer = { ...(body.taxPayer as IDataObject), fiscalNumber };
 	}
 
-	// Morada — só sobrescreve campos preenchidos
+	// Morada — só sobrescreve os campos que o utilizador adicionou
 	const currentAddress = (body.mainAddress as IDataObject) ?? {};
-	const address = context.getNodeParameter('salespersonAddress', i, '') as string;
-	const locality = context.getNodeParameter('salespersonLocality', i, '') as string;
-	const postalCode = context.getNodeParameter('salespersonPostalCode', i, '') as string;
-	const district = context.getNodeParameter('salespersonDistrict', i, 0) as number;
-	const county = context.getNodeParameter('salespersonCounty', i, 0) as number;
-	const parish = context.getNodeParameter('salespersonParish', i, 0) as number;
-	const countryRegionId = context.getNodeParameter('salespersonCountryRegionId', i, 0) as number;
-	const countryCode = context.getNodeParameter('salespersonCountryCode', i, 0) as number;
-
-	if (address) { currentAddress.address = address; currentAddress.name = address; }
-	if (locality) currentAddress.locality = locality;
-	if (postalCode) currentAddress.postalCodeNumeric = postalCode;
-	if (district) currentAddress.district = district;
-	if (county) currentAddress.county = county;
-	if (parish) currentAddress.parish = parish;
-	if (countryRegionId) currentAddress.countryRegionId = countryRegionId;
-	if (countryCode) currentAddress.countryCode = countryCode;
+	if (additional.address !== undefined) {
+		currentAddress.address = additional.address;
+		currentAddress.name = additional.address;
+	}
+	if (additional.locality !== undefined) currentAddress.locality = additional.locality;
+	if (additional.postalCode !== undefined) currentAddress.postalCodeNumeric = additional.postalCode;
+	if (additional.district !== undefined) currentAddress.district = additional.district;
+	if (additional.county !== undefined) currentAddress.county = additional.county;
+	if (additional.parish !== undefined) currentAddress.parish = additional.parish;
+	if (additional.countryRegionId !== undefined) currentAddress.countryRegionId = additional.countryRegionId;
+	if (additional.countryCode !== undefined) currentAddress.countryCode = additional.countryCode;
 	body.mainAddress = currentAddress;
 
 	// Campos adicionais

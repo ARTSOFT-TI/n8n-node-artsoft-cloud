@@ -44,11 +44,12 @@ export async function cloudCreateDocumentHeader(
 	i: number,
 ): Promise<Record<string, unknown>> {
 	const idSerie = this.getNodeParameter('idSerie', i) as number;
-	const idThirdParty = this.getNodeParameter('idThirdParty', i, 0) as number;
-	const fiscalNumber = this.getNodeParameter('fiscalNumber', i, '') as string;
 	const idWarehouse = this.getNodeParameter('idWarehouse', i, 1) as number;
-	const createThirdParty = this.getNodeParameter('createThirdParty', i, false) as boolean;
-	const docDateRaw = this.getNodeParameter('docDate', i, '') as string;
+	const additional = this.getNodeParameter('documentAdditionalFields', i, {}) as IDataObject;
+	const idThirdParty = additional.idThirdParty as number | undefined;
+	const fiscalNumber = additional.fiscalNumber as string | undefined;
+	const createThirdParty = additional.createThirdParty as boolean | undefined;
+	const docDateRaw = additional.docDate as string | undefined;
 
 	const body: IDataObject = { idSerie, idWarehouse };
 
@@ -77,27 +78,23 @@ export async function cloudUpdateDocument(
 	i: number,
 ): Promise<Record<string, unknown>> {
 	const id = this.getNodeParameter('documentId', i) as string;
-	const sign = this.getNodeParameter('sign', i, false) as boolean;
+	const additional = this.getNodeParameter('documentUpdateFields', i, {}) as IDataObject;
+	const sign = (additional.sign as boolean) ?? false;
 
 	const body: IDataObject = {};
 
 	// — Campos principais —
-	const comment = this.getNodeParameter('documentComment', i, '') as string;
-	if (comment) body.comment = comment;
-
-	const idVatTypeExemption = this.getNodeParameter('documentIdVatTypeExemption', i, 0) as number;
-	if (idVatTypeExemption) body.idVatTypeExemption = idVatTypeExemption;
-
-	const discountPercent = this.getNodeParameter('documentDiscountPercent', i, 0) as number;
-	if (discountPercent) body.total = { discountPercent };
+	if (additional.comment !== undefined) body.comment = additional.comment;
+	if (additional.idVatTypeExemption !== undefined) body.idVatTypeExemption = additional.idVatTypeExemption;
+	if (additional.discountPercent !== undefined) body.total = { discountPercent: additional.discountPercent };
 
 	// — financialInfo (obrigatórios + opcionais) —
-	const docReference = this.getNodeParameter('documentDocReference', i, '') as string;
-	const idPayCond = this.getNodeParameter('documentIdPayCond', i, 0) as number;
+	const docReference = additional.docReference as string | undefined;
+	const idPayCond = additional.idPayCond as number | undefined;
 	const financialExtra = this.getNodeParameter('documentFinancialInfo', i, {}) as IDataObject;
 	const financialInfo: IDataObject = {};
-	if (docReference) financialInfo.docReference = docReference;
-	if (idPayCond) financialInfo.idPayCond = idPayCond;
+	if (docReference !== undefined) financialInfo.docReference = docReference;
+	if (idPayCond !== undefined) financialInfo.idPayCond = idPayCond;
 	if (financialExtra.idSalesPerson) financialInfo.idSalesPerson = financialExtra.idSalesPerson;
 	if (Object.keys(financialInfo).length > 0) body.financialInfo = financialInfo;
 

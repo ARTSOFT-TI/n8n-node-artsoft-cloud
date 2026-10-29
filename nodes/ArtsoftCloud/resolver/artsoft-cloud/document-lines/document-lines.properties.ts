@@ -87,16 +87,6 @@ export const cloudDocumentLineProperties: INodeProperties[] = [
 	// ══════════════════════════════════════════════════════════════════
 	// CREATE / UPDATE — credit limit confirmation
 	// ══════════════════════════════════════════════════════════════════
-	{
-		displayName: 'Confirm Credit Limit',
-		name: 'confirmCreditLimit',
-		type: 'boolean',
-		default: false,
-		displayOptions: {
-			show: { resource: [R], operation: ['cloudCreateDocumentLine', 'cloudUpdateDocumentLine'] },
-		},
-		description: 'Whether to confirm exceeding the credit limit',
-	},
 
 	// ══════════════════════════════════════════════════════════════════
 	// CREATE / UPDATE — individual fields
@@ -145,6 +135,13 @@ export const cloudDocumentLineProperties: INodeProperties[] = [
 			show: { resource: [R], operation: ['cloudCreateDocumentLine', 'cloudUpdateDocumentLine'] },
 		},
 		options: [
+			{
+				displayName: 'Confirm Credit Limit',
+				name: 'confirmCreditLimit',
+				type: 'boolean',
+				default: false,
+				description: 'Whether to confirm exceeding the credit limit',
+			},
 			{
 				displayName: 'Gross Unit Price',
 				name: 'valUnGross',

@@ -71,7 +71,7 @@ describe('cloudApiRequestAllItems', () => {
 
 	it('forwards search, filter and sort params on every page', async () => {
 		const { context, requests } = makeContext(
-			{ returnAll: true, $search: 'abc', $sort: 'name', $direction: 'desc' },
+			{ returnAll: true, filters: { search: 'abc', sort: 'name', direction: 'desc' } },
 			[{ value: rows(0, 1), nextToken: 'a' }, { value: rows(1, 2) }],
 		);
 

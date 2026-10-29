@@ -1,0 +1,13 @@
+{
+	"method": "POST",
+	"url": "/documents/1/lines",
+	"qs": {
+		"confirmCreditLimit": true
+	},
+	"body": {
+		"idSku": 5,
+		"quantity": 2,
+		"valUn": 10,
+		"valUnGross": 12
+	}
+}

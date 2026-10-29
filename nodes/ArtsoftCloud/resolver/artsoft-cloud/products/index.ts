@@ -45,14 +45,14 @@ function buildProductPayload(context: IExecuteFunctions, i: number): IDataObject
 	return {
 		sku: context.getNodeParameter('productSku', i) as string,
 		mainName: context.getNodeParameter('productMainName', i) as string,
-		saftClass: context.getNodeParameter('productSaftClass', i) as string,
-		vatType: context.getNodeParameter('productVatType', i) as string,
-		inventaryClass: context.getNodeParameter('productInventaryClass', i) as string,
+		saftClass: (additional.saftClass as string) ?? 'SAFT_PROD',
+		vatType: (additional.vatType as string) ?? 'NORMAL',
+		inventaryClass: (additional.inventaryClass as string) ?? 'MERCADORIAS',
 		status: 'ACTIVE',
-		quantityDecimalPlaces: context.getNodeParameter('productQuantityDecimalPlaces', i, 2) as number,
-		unitCodeId: context.getNodeParameter('productUnitCodeId', i, 5) as number,
+		quantityDecimalPlaces: (additional.quantityDecimalPlaces as number) ?? 2,
+		unitCodeId: (additional.unitCodeId as number) ?? 5,
 		warehouse: {
-			id: context.getNodeParameter('productWarehouseId', i, 1) as number,
+			id: (additional.warehouseId as number) ?? 1,
 			retired: false,
 			suspended: false,
 			status: 'ACTIVE',
@@ -88,24 +88,14 @@ function applyProductChanges(
 	const mainName = context.getNodeParameter('productMainName', i, '') as string;
 	if (mainName) body.mainName = mainName;
 
-	const saftClass = context.getNodeParameter('productSaftClass', i, '') as string;
-	if (saftClass) body.saftClass = saftClass;
-
-	const vatType = context.getNodeParameter('productVatType', i, '') as string;
-	if (vatType) body.vatType = vatType;
-
-	const inventaryClass = context.getNodeParameter('productInventaryClass', i, '') as string;
-	if (inventaryClass) body.inventaryClass = inventaryClass;
-
-	const quantityDecimalPlaces = context.getNodeParameter('productQuantityDecimalPlaces', i, 0) as number;
-	if (quantityDecimalPlaces) body.quantityDecimalPlaces = quantityDecimalPlaces;
-
-	const unitCodeId = context.getNodeParameter('productUnitCodeId', i, 0) as number;
-	if (unitCodeId) body.unitCodeId = unitCodeId;
-
-	const warehouseId = context.getNodeParameter('productWarehouseId', i, 0) as number;
-	if (warehouseId) {
-		body.warehouse = { ...(body.warehouse as IDataObject), id: warehouseId };
+	// Classificação e unidades — só sobrescreve o que o utilizador adicionou
+	if (additional.saftClass !== undefined) body.saftClass = additional.saftClass;
+	if (additional.vatType !== undefined) body.vatType = additional.vatType;
+	if (additional.inventaryClass !== undefined) body.inventaryClass = additional.inventaryClass;
+	if (additional.quantityDecimalPlaces !== undefined) body.quantityDecimalPlaces = additional.quantityDecimalPlaces;
+	if (additional.unitCodeId !== undefined) body.unitCodeId = additional.unitCodeId;
+	if (additional.warehouseId !== undefined) {
+		body.warehouse = { ...(body.warehouse as IDataObject), id: additional.warehouseId };
 	}
 
 	// Preços — mergea com os existentes (mantém id)

@@ -1,0 +1,61 @@
+{
+	"method": "POST",
+	"url": "/suppliers/",
+	"body": {
+		"number": 4,
+		"name": "Forn Dois",
+		"shortName": "FD",
+		"birthDate": "",
+		"status": "ACTIVE",
+		"inactive": false,
+		"isCompany": false,
+		"mainAddress": {
+			"name": "",
+			"status": "ACTIVE",
+			"parish": 0,
+			"county": 0,
+			"district": 0,
+			"postalCodeNumeric": "",
+			"countryCode": 620,
+			"countryRegionId": 0,
+			"address": "",
+			"locality": "",
+			"addressNumber": 0,
+			"latitude": 0,
+			"longitude": 0,
+			"addressSubunit": "",
+			"postalCodeAlpha": "",
+			"localId": 0,
+			"hasCurrentAccount": false,
+			"validUntil": "2026-01-15T10:00:00.000Z"
+		},
+		"taxPayer": {
+			"fiscalNumber": "999999993",
+			"countryCode": 620,
+			"status": 0,
+			"valid": true
+		},
+		"companyDetails": {
+			"eori": "",
+			"tradeName": ""
+		},
+		"supplierStatusId": 1,
+		"addresses": [],
+		"staffs": [],
+		"observations": {
+			"observation1": ""
+		},
+		"url": "",
+		"swift": "",
+		"iban": "",
+		"priceId": null,
+		"seriesIds": [],
+		"hierarchies": {},
+		"phoneNumberCountryId": 620,
+		"mobileNumberCountryId": 620,
+		"anonymous": false,
+		"privateRecord": false,
+		"concealmentReason": null,
+		"thirdPartyCAEList": []
+	}
+}

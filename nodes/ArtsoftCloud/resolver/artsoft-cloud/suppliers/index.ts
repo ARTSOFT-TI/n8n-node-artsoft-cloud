@@ -11,18 +11,18 @@ function buildSupplierPayload(context: IExecuteFunctions, i: number): IDataObjec
 		birthDate: (additional.birthDate as string) ?? '',
 		status: (additional.status as string) ?? 'ACTIVE',
 		inactive: (additional.inactive as boolean) ?? false,
-		isCompany: context.getNodeParameter('supplierIsCompany', i) as boolean,
+		isCompany: (additional.isCompany as boolean) ?? false,
 		mainAddress: {
-			name: context.getNodeParameter('supplierAddress', i, '') as string,
+			name: (additional.address as string) ?? '',
 			status: 'ACTIVE',
-			parish: context.getNodeParameter('supplierParish', i, 0) as number,
-			county: context.getNodeParameter('supplierCounty', i, 0) as number,
-			district: context.getNodeParameter('supplierDistrict', i, 0) as number,
-			postalCodeNumeric: context.getNodeParameter('supplierPostalCode', i, '') as string,
-			countryCode: context.getNodeParameter('supplierCountryCode', i, 620) as number,
-			countryRegionId: context.getNodeParameter('supplierCountryRegionId', i, 0) as number,
-			address: context.getNodeParameter('supplierAddress', i, '') as string,
-			locality: context.getNodeParameter('supplierLocality', i, '') as string,
+			parish: (additional.parish as number) ?? 0,
+			county: (additional.county as number) ?? 0,
+			district: (additional.district as number) ?? 0,
+			postalCodeNumeric: (additional.postalCode as string) ?? '',
+			countryCode: (additional.countryCode as number) ?? 620,
+			countryRegionId: (additional.countryRegionId as number) ?? 0,
+			address: (additional.address as string) ?? '',
+			locality: (additional.locality as string) ?? '',
 			addressNumber: 0,
 			latitude: 0,
 			longitude: 0,
@@ -34,13 +34,13 @@ function buildSupplierPayload(context: IExecuteFunctions, i: number): IDataObjec
 		},
 		taxPayer: {
 			fiscalNumber: context.getNodeParameter('supplierFiscalNumber', i) as string,
-			countryCode: context.getNodeParameter('supplierCountryCode', i, 620) as number,
+			countryCode: (additional.countryCode as number) ?? 620,
 			status: 0,
 			valid: true,
 		},
 		companyDetails: {
-			eori: context.getNodeParameter('supplierEori', i, '') as string,
-			tradeName: context.getNodeParameter('supplierTradeName', i, '') as string,
+			eori: (additional.eori as string) ?? '',
+			tradeName: (additional.tradeName as string) ?? '',
 		},
 		supplierStatusId: (additional.supplierStatusId as number) ?? 1,
 		addresses: [],
@@ -83,36 +83,28 @@ function applySupplierChanges(
 		body.taxPayer = { ...(body.taxPayer as IDataObject), fiscalNumber };
 	}
 
-	body.isCompany = context.getNodeParameter('supplierIsCompany', i, false) as boolean;
+	if (additional.isCompany !== undefined) body.isCompany = additional.isCompany;
 
-	// Morada — só sobrescreve campos preenchidos
+	// Morada — só sobrescreve os campos que o utilizador adicionou
 	const currentAddress = (body.mainAddress as IDataObject) ?? {};
-	const address = context.getNodeParameter('supplierAddress', i, '') as string;
-	const locality = context.getNodeParameter('supplierLocality', i, '') as string;
-	const postalCode = context.getNodeParameter('supplierPostalCode', i, '') as string;
-	const district = context.getNodeParameter('supplierDistrict', i, 0) as number;
-	const county = context.getNodeParameter('supplierCounty', i, 0) as number;
-	const parish = context.getNodeParameter('supplierParish', i, 0) as number;
-	const countryRegionId = context.getNodeParameter('supplierCountryRegionId', i, 0) as number;
-	const countryCode = context.getNodeParameter('supplierCountryCode', i, 0) as number;
-
-	if (address) { currentAddress.address = address; currentAddress.name = address; }
-	if (locality) currentAddress.locality = locality;
-	if (postalCode) currentAddress.postalCodeNumeric = postalCode;
-	if (district) currentAddress.district = district;
-	if (county) currentAddress.county = county;
-	if (parish) currentAddress.parish = parish;
-	if (countryRegionId) currentAddress.countryRegionId = countryRegionId;
-	if (countryCode) currentAddress.countryCode = countryCode;
+	if (additional.address !== undefined) {
+		currentAddress.address = additional.address;
+		currentAddress.name = additional.address;
+	}
+	if (additional.locality !== undefined) currentAddress.locality = additional.locality;
+	if (additional.postalCode !== undefined) currentAddress.postalCodeNumeric = additional.postalCode;
+	if (additional.district !== undefined) currentAddress.district = additional.district;
+	if (additional.county !== undefined) currentAddress.county = additional.county;
+	if (additional.parish !== undefined) currentAddress.parish = additional.parish;
+	if (additional.countryRegionId !== undefined) currentAddress.countryRegionId = additional.countryRegionId;
+	if (additional.countryCode !== undefined) currentAddress.countryCode = additional.countryCode;
 	body.mainAddress = currentAddress;
 
 	// Empresa
 	if (body.isCompany) {
 		const currentCompany = (body.companyDetails as IDataObject) ?? {};
-		const tradeName = context.getNodeParameter('supplierTradeName', i, '') as string;
-		const eori = context.getNodeParameter('supplierEori', i, '') as string;
-		if (tradeName) currentCompany.tradeName = tradeName;
-		if (eori) currentCompany.eori = eori;
+		if (additional.tradeName !== undefined) currentCompany.tradeName = additional.tradeName;
+		if (additional.eori !== undefined) currentCompany.eori = additional.eori;
 		body.companyDetails = currentCompany;
 	}
 

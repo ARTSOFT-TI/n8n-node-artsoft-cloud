@@ -16,14 +16,22 @@ Modulo de gestao de produtos/artigos na API ARTSOFT Cloud Invoice. Permite lista
 
 | Campo | Tipo | Descricao |
 |-------|------|-----------|
-| $search | string | Termo de pesquisa |
-| $filter | string | Expressao de filtro |
+| filters | collection | Filtros opcionais: `search`, `filter`, `sort`, `direction` (ver abaixo) |
 | returnAll | boolean | Devolve todos os resultados (o node percorre as paginas internamente) |
 | limit | number | Maximo de resultados a devolver (default: 50; so aparece se `returnAll` estiver desligado) |
-| $sort | string | Campo de ordenacao |
-| $direction | options | Direcao da ordenacao (asc/desc) |
+
+### Filtros (colecao opcional)
+
+| Campo | Tipo | Default | Descricao |
+|-------|------|---------|-----------|
+| search | string | '' | Termo de pesquisa |
+| filter | string | '' | Expressao de filtro |
+| sort | string | '' | Campo de ordenacao |
+| direction | options | asc | Direcao da ordenacao (asc/desc) |
 
 ## Campos para Criar / Atualizar
+
+Os campos opcionais ficam na colecao **Additional Fields** (em branco por defeito). Na atualizacao, so sao alterados os campos que forem adicionados a colecao.
 
 ### Campos Principais (obrigatorios na criacao)
 
@@ -31,14 +39,8 @@ Modulo de gestao de produtos/artigos na API ARTSOFT Cloud Invoice. Permite lista
 |-------|------|-------------|-----------|
 | productSku | string | Sim | Codigo do produto (SKU) |
 | productMainName | string | Sim | Nome principal do produto |
-| productSaftClass | options | Sim | Classificacao SAF-T (ver valores abaixo) |
-| productVatType | options | Sim | Tipo de IVA (ver valores abaixo) |
-| productInventaryClass | options | Sim | Classe de inventario (ver valores abaixo) |
-| productWarehouseId | number | Nao | ID do armazem (default: 1) |
-| productUnitCodeId | number | Nao | ID da unidade de medida (default: 5 = Unidade) |
-| productQuantityDecimalPlaces | number | Nao | Casas decimais na quantidade (default: 2) |
 
-### Valores para Classe SAF-T (`productSaftClass`)
+### Valores para Classe SAF-T (`saftClass`)
 
 | Valor | Descricao |
 |-------|-----------|
@@ -48,7 +50,7 @@ Modulo de gestao de produtos/artigos na API ARTSOFT Cloud Invoice. Permite lista
 | SAFT_TAX | Imposto/Taxa (I) |
 | SAFT_EXCL | Excluido (E) |
 
-### Valores para Tipo de IVA (`productVatType`)
+### Valores para Tipo de IVA (`vatType`)
 
 | Valor | Descricao |
 |-------|-----------|
@@ -57,7 +59,7 @@ Modulo de gestao de produtos/artigos na API ARTSOFT Cloud Invoice. Permite lista
 | INTERMEDIO | Intermedio |
 | NORMAL | Normal |
 
-### Valores para Classe de Inventario (`productInventaryClass`)
+### Valores para Classe de Inventario (`inventaryClass`)
 
 | Valor | Descricao |
 |-------|-----------|
@@ -98,6 +100,12 @@ Modulo de gestao de produtos/artigos na API ARTSOFT Cloud Invoice. Permite lista
 | discontinued | boolean | false | Produto descontinuado |
 | suspended | boolean | false | Produto suspenso |
 | totalPrice | boolean | false | Preco total |
+| saftClass | options | SAFT_PROD | Classificacao SAF-T (ver valores abaixo) |
+| vatType | options | NORMAL | Tipo de IVA (ver valores abaixo) |
+| inventaryClass | options | MERCADORIAS | Classe de inventario (ver valores abaixo) |
+| warehouseId | number | 1 | ID do armazem |
+| unitCodeId | number | 5 | ID da unidade de medida |
+| quantityDecimalPlaces | number | 2 | Casas decimais na quantidade |
 
 ## Comportamento Especial
 

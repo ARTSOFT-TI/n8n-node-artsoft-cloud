@@ -1,0 +1,33 @@
+{
+	"method": "POST",
+	"url": "/products/",
+	"body": {
+		"sku": "P-2",
+		"mainName": "Produto 2",
+		"saftClass": "SAFT_PROD",
+		"vatType": "NORMAL",
+		"inventaryClass": "MERCADORIAS",
+		"status": "ACTIVE",
+		"quantityDecimalPlaces": 2,
+		"unitCodeId": 5,
+		"warehouse": {
+			"id": 1,
+			"retired": false,
+			"suspended": false,
+			"status": "ACTIVE"
+		},
+		"flags": {
+			"ignoreHeaderDiscount": false,
+			"ignoreLineDiscount": false,
+			"discontinued": false,
+			"suspended": false,
+			"totalPrice": false
+		},
+		"exemptVatId": null,
+		"prices": [],
+		"optionalCodes": [],
+		"relatedSkus": [],
+		"hierarchies": {},
+		"obs": ""
+	}
+}
