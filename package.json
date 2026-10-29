@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-artsoft-cloud",
-	"version": "2.0.2",
+	"version": "2.0.3",
 	"description": "n8n community node for ARTSOFT Cloud Invoice integration",
 	"license": "MIT",
 	"homepage": "https://github.com/ARTSOFT-TI/n8n-node-artsoft-cloud#readme",
