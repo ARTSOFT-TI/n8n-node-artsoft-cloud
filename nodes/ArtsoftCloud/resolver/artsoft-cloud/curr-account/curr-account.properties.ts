@@ -1,4 +1,5 @@
 import { INodeProperties } from 'n8n-workflow';
+import { filtersProperty, returnAllProperties } from '../GenericFunctions';
 
 export const cloudCurrAccountOperations = [
 	{
@@ -72,50 +73,8 @@ export const cloudCurrAccountProperties: INodeProperties[] = [
 	// ══════════════════════════════════════════════════════════════════
 	// LIST — pagination
 	// ══════════════════════════════════════════════════════════════════
-	{
-		displayName: 'Search',
-		name: '$search',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: listOps } },
-		description: 'Search term',
-	},
-	{
-		displayName: 'Filter',
-		name: '$filter',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: listOps } },
-		description: 'Filter expression',
-	},
-	{
-		displayName: 'Page Size',
-		name: '$size',
-		type: 'number',
-		default: 10,
-		displayOptions: { show: { resource: [R], operation: listOps } },
-		description: 'Number of results per page',
-	},
-	{
-		displayName: 'Sort By',
-		name: '$sort',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: listOps } },
-		description: 'Field to sort by',
-	},
-	{
-		displayName: 'Direction',
-		name: '$direction',
-		type: 'options',
-		default: 'asc',
-		options: [
-			{ name: 'Ascending', value: 'asc' },
-			{ name: 'Descending', value: 'desc' },
-		],
-		displayOptions: { show: { resource: [R], operation: listOps } },
-		description: 'Sort direction',
-	},
+	filtersProperty(R, listOps),
+	...returnAllProperties(R, listOps),
 
 	// ══════════════════════════════════════════════════════════════════
 	// CREATE ENTRY / REGUL — required fields
@@ -139,14 +98,6 @@ export const cloudCurrAccountProperties: INodeProperties[] = [
 		description: 'ID of the customer or supplier',
 	},
 	{
-		displayName: 'Tax ID',
-		name: 'caFiscalNumber',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: createOps } },
-		description: 'Tax ID (VAT/NIF) of the third party',
-	},
-	{
 		displayName: 'Amount',
 		name: 'caValCurrAcc',
 		type: 'number',
@@ -155,39 +106,6 @@ export const cloudCurrAccountProperties: INodeProperties[] = [
 		typeOptions: { numberPrecision: 2 },
 		displayOptions: { show: { resource: [R], operation: createOps } },
 		description: 'Current account amount',
-	},
-	{
-		displayName: 'Balance',
-		name: 'caBalance',
-		type: 'number',
-		default: 0,
-		typeOptions: { numberPrecision: 2 },
-		displayOptions: { show: { resource: [R], operation: createOps } },
-		description: 'Total balance',
-	},
-	{
-		displayName: 'Document Date',
-		name: 'caDocDate',
-		type: 'dateTime',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: createOps } },
-		description: 'Date of the document',
-	},
-	{
-		displayName: 'Comment',
-		name: 'caComment',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: createOps } },
-		description: 'Free-text notes about the entry',
-	},
-	{
-		displayName: 'Document Reference',
-		name: 'caDocReference',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: createOps } },
-		description: 'Reference to the document',
 	},
 
 	// — Additional fields —
@@ -200,6 +118,35 @@ export const cloudCurrAccountProperties: INodeProperties[] = [
 		displayOptions: { show: { resource: [R], operation: createOps } },
 		options: [
 			{
+				displayName: 'Balance',
+				name: 'balance',
+				type: 'number',
+				default: 0,
+				typeOptions: { numberPrecision: 2 },
+				description: 'Total balance',
+			},
+			{
+				displayName: 'Comment',
+				name: 'comment',
+				type: 'string',
+				default: '',
+				description: 'Free-text notes about the entry',
+			},
+			{
+				displayName: 'Document Date',
+				name: 'docDate',
+				type: 'dateTime',
+				default: '',
+				description: 'Date of the document',
+			},
+			{
+				displayName: 'Document Reference',
+				name: 'docReference',
+				type: 'string',
+				default: '',
+				description: 'Reference to the document',
+			},
+			{
 				displayName: 'Due Date',
 				name: 'vencDate',
 				type: 'dateTime',
@@ -210,6 +157,13 @@ export const cloudCurrAccountProperties: INodeProperties[] = [
 				name: 'payDate',
 				type: 'dateTime',
 				default: '',
+			},
+			{
+				displayName: 'Tax ID',
+				name: 'fiscalNumber',
+				type: 'string',
+				default: '',
+				description: 'Tax ID (VAT/NIF) of the third party',
 			},
 			{
 				displayName: 'Total Manual Mode',
@@ -364,40 +318,6 @@ export const cloudCurrAccountProperties: INodeProperties[] = [
 	// UPDATE — main fields
 	// ══════════════════════════════════════════════════════════════════
 	{
-		displayName: 'Comment',
-		name: 'caUpdateComment',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: ['cloudUpdateCurrAccount'] } },
-		description: 'Free-text notes about the entry',
-	},
-	{
-		displayName: 'Document Reference',
-		name: 'caUpdateDocReference',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: ['cloudUpdateCurrAccount'] } },
-		description: 'Reference to the document',
-	},
-	{
-		displayName: 'Amount',
-		name: 'caUpdateValCurrAcc',
-		type: 'number',
-		default: 0,
-		typeOptions: { numberPrecision: 2 },
-		displayOptions: { show: { resource: [R], operation: ['cloudUpdateCurrAccount'] } },
-		description: 'Current account amount',
-	},
-	{
-		displayName: 'Balance',
-		name: 'caUpdateBalance',
-		type: 'number',
-		default: 0,
-		typeOptions: { numberPrecision: 2 },
-		displayOptions: { show: { resource: [R], operation: ['cloudUpdateCurrAccount'] } },
-		description: 'Total balance',
-	},
-	{
 		displayName: 'Additional Fields (Update)',
 		name: 'caUpdateAdditionalFields',
 		type: 'collection',
@@ -406,10 +326,40 @@ export const cloudCurrAccountProperties: INodeProperties[] = [
 		displayOptions: { show: { resource: [R], operation: ['cloudUpdateCurrAccount'] } },
 		options: [
 			{
+				displayName: 'Amount',
+				name: 'valCurrAcc',
+				type: 'number',
+				default: 0,
+				typeOptions: { numberPrecision: 2 },
+				description: 'Current account amount',
+			},
+			{
+				displayName: 'Balance',
+				name: 'balance',
+				type: 'number',
+				default: 0,
+				typeOptions: { numberPrecision: 2 },
+				description: 'Total balance',
+			},
+			{
+				displayName: 'Comment',
+				name: 'comment',
+				type: 'string',
+				default: '',
+				description: 'Free-text notes about the entry',
+			},
+			{
 				displayName: 'Document Date',
 				name: 'docDate',
 				type: 'dateTime',
 				default: '',
+			},
+			{
+				displayName: 'Document Reference',
+				name: 'docReference',
+				type: 'string',
+				default: '',
+				description: 'Reference to the document',
 			},
 			{
 				displayName: 'Due Date',

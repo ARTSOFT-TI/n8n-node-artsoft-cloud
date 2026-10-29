@@ -1,38 +1,34 @@
 import { IDataObject, IExecuteFunctions } from 'n8n-workflow';
-import { buildPaginationParams, cloudApiRequest } from '../GenericFunctions';
+import { cloudApiRequest, cloudApiRequestAllItems } from '../GenericFunctions';
 
 export async function cloudListBillings(
 	this: IExecuteFunctions,
 	i: number,
-): Promise<Record<string, unknown>> {
-	const qs = buildPaginationParams(this, i);
-	return cloudApiRequest.call(this, 'GET', '/documents/billings', undefined, qs);
+): Promise<IDataObject[]> {
+	return cloudApiRequestAllItems.call(this, '/documents/billings', i);
 }
 
 export async function cloudListBillingsBySaftType(
 	this: IExecuteFunctions,
 	i: number,
-): Promise<Record<string, unknown>> {
+): Promise<IDataObject[]> {
 	const saftType = this.getNodeParameter('saftType', i) as string;
-	const qs = buildPaginationParams(this, i);
-	return cloudApiRequest.call(this, 'GET', `/documents/billings/${saftType}`, undefined, qs);
+	return cloudApiRequestAllItems.call(this, `/documents/billings/${saftType}`, i);
 }
 
 export async function cloudListPurchases(
 	this: IExecuteFunctions,
 	i: number,
-): Promise<Record<string, unknown>> {
-	const qs = buildPaginationParams(this, i);
-	return cloudApiRequest.call(this, 'GET', '/documents/purchases', undefined, qs);
+): Promise<IDataObject[]> {
+	return cloudApiRequestAllItems.call(this, '/documents/purchases', i);
 }
 
 export async function cloudListPurchasesBySaftType(
 	this: IExecuteFunctions,
 	i: number,
-): Promise<Record<string, unknown>> {
+): Promise<IDataObject[]> {
 	const saftType = this.getNodeParameter('saftType', i) as string;
-	const qs = buildPaginationParams(this, i);
-	return cloudApiRequest.call(this, 'GET', `/documents/purchases/${saftType}`, undefined, qs);
+	return cloudApiRequestAllItems.call(this, `/documents/purchases/${saftType}`, i);
 }
 
 export async function cloudGetDocument(
@@ -48,11 +44,12 @@ export async function cloudCreateDocumentHeader(
 	i: number,
 ): Promise<Record<string, unknown>> {
 	const idSerie = this.getNodeParameter('idSerie', i) as number;
-	const idThirdParty = this.getNodeParameter('idThirdParty', i, 0) as number;
-	const fiscalNumber = this.getNodeParameter('fiscalNumber', i, '') as string;
 	const idWarehouse = this.getNodeParameter('idWarehouse', i, 1) as number;
-	const createThirdParty = this.getNodeParameter('createThirdParty', i, false) as boolean;
-	const docDateRaw = this.getNodeParameter('docDate', i, '') as string;
+	const additional = this.getNodeParameter('documentAdditionalFields', i, {}) as IDataObject;
+	const idThirdParty = additional.idThirdParty as number | undefined;
+	const fiscalNumber = additional.fiscalNumber as string | undefined;
+	const createThirdParty = additional.createThirdParty as boolean | undefined;
+	const docDateRaw = additional.docDate as string | undefined;
 
 	const body: IDataObject = { idSerie, idWarehouse };
 
@@ -81,27 +78,23 @@ export async function cloudUpdateDocument(
 	i: number,
 ): Promise<Record<string, unknown>> {
 	const id = this.getNodeParameter('documentId', i) as string;
-	const sign = this.getNodeParameter('sign', i, false) as boolean;
+	const additional = this.getNodeParameter('documentUpdateFields', i, {}) as IDataObject;
+	const sign = (additional.sign as boolean) ?? false;
 
 	const body: IDataObject = {};
 
 	// — Campos principais —
-	const comment = this.getNodeParameter('documentComment', i, '') as string;
-	if (comment) body.comment = comment;
-
-	const idVatTypeExemption = this.getNodeParameter('documentIdVatTypeExemption', i, 0) as number;
-	if (idVatTypeExemption) body.idVatTypeExemption = idVatTypeExemption;
-
-	const discountPercent = this.getNodeParameter('documentDiscountPercent', i, 0) as number;
-	if (discountPercent) body.total = { discountPercent };
+	if (additional.comment !== undefined) body.comment = additional.comment;
+	if (additional.idVatTypeExemption !== undefined) body.idVatTypeExemption = additional.idVatTypeExemption;
+	if (additional.discountPercent !== undefined) body.total = { discountPercent: additional.discountPercent };
 
 	// — financialInfo (obrigatórios + opcionais) —
-	const docReference = this.getNodeParameter('documentDocReference', i, '') as string;
-	const idPayCond = this.getNodeParameter('documentIdPayCond', i, 0) as number;
+	const docReference = additional.docReference as string | undefined;
+	const idPayCond = additional.idPayCond as number | undefined;
 	const financialExtra = this.getNodeParameter('documentFinancialInfo', i, {}) as IDataObject;
 	const financialInfo: IDataObject = {};
-	if (docReference) financialInfo.docReference = docReference;
-	if (idPayCond) financialInfo.idPayCond = idPayCond;
+	if (docReference !== undefined) financialInfo.docReference = docReference;
+	if (idPayCond !== undefined) financialInfo.idPayCond = idPayCond;
 	if (financialExtra.idSalesPerson) financialInfo.idSalesPerson = financialExtra.idSalesPerson;
 	if (Object.keys(financialInfo).length > 0) body.financialInfo = financialInfo;
 

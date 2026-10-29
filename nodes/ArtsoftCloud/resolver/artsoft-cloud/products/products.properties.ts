@@ -1,4 +1,5 @@
 import { INodeProperties } from 'n8n-workflow';
+import { filtersProperty, returnAllProperties } from '../GenericFunctions';
 
 export const cloudProductOperations = [
 	{
@@ -55,50 +56,8 @@ export const cloudProductProperties: INodeProperties[] = [
 	// ══════════════════════════════════════════════════════════════════
 	// LIST — pagination
 	// ══════════════════════════════════════════════════════════════════
-	{
-		displayName: 'Search',
-		name: '$search',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: ['cloudListProducts'] } },
-		description: 'Search term',
-	},
-	{
-		displayName: 'Filter',
-		name: '$filter',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: ['cloudListProducts'] } },
-		description: 'Filter expression',
-	},
-	{
-		displayName: 'Page Size',
-		name: '$size',
-		type: 'number',
-		default: 10,
-		displayOptions: { show: { resource: [R], operation: ['cloudListProducts'] } },
-		description: 'Number of results per page',
-	},
-	{
-		displayName: 'Sort By',
-		name: '$sort',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: ['cloudListProducts'] } },
-		description: 'Field to sort by',
-	},
-	{
-		displayName: 'Direction',
-		name: '$direction',
-		type: 'options',
-		default: 'asc',
-		options: [
-			{ name: 'Ascending', value: 'asc' },
-			{ name: 'Descending', value: 'desc' },
-		],
-		displayOptions: { show: { resource: [R], operation: ['cloudListProducts'] } },
-		description: 'Sort direction',
-	},
+	filtersProperty(R, ['cloudListProducts']),
+	...returnAllProperties(R, ['cloudListProducts']),
 
 	// ══════════════════════════════════════════════════════════════════
 	// CREATE / UPDATE — individual fields
@@ -120,76 +79,6 @@ export const cloudProductProperties: INodeProperties[] = [
 		default: '',
 		displayOptions: { show: { resource: [R], operation: CU } },
 		description: 'Main name of the product',
-	},
-	{
-		displayName: 'SAF-T Class',
-		name: 'productSaftClass',
-		type: 'options',
-		default: 'SAFT_PROD',
-		options: [
-			{ name: 'Excluded (E)', value: 'SAFT_EXCL' },
-			{ name: 'Other (O)', value: 'SAFT_OTHER' },
-			{ name: 'Product (P)', value: 'SAFT_PROD' },
-			{ name: 'Service (S)', value: 'SAFT_SERV' },
-			{ name: 'Tax/Fee (I)', value: 'SAFT_TAX' },
-		],
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'SAF-T classification of the product',
-	},
-	{
-		displayName: 'VAT Type',
-		name: 'productVatType',
-		type: 'options',
-		default: 'NORMAL',
-		options: [
-			{ name: 'Exempt', value: 'ISENTO' },
-			{ name: 'Intermediate', value: 'INTERMEDIO' },
-			{ name: 'Normal', value: 'NORMAL' },
-			{ name: 'Reduced', value: 'REDUZIDO' },
-		],
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'Type of VAT rate',
-	},
-	{
-		displayName: 'Inventory Class',
-		name: 'productInventaryClass',
-		type: 'options',
-		default: 'MERCADORIAS',
-		options: [
-			{ name: 'By-Products', value: 'SUBPRODUTOS' },
-			{ name: 'Finished Goods', value: 'PRODUTOS_ACABADOS' },
-			{ name: 'Merchandise', value: 'MERCADORIAS' },
-			{ name: 'Packaging', value: 'EMBALAGENS' },
-			{ name: 'Raw Materials', value: 'MATERIAS_PRIMAS' },
-			{ name: 'Work in Progress', value: 'PRODUTOS_CURSO' },
-		],
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'Inventory class of the product',
-	},
-	{
-		displayName: 'Warehouse ID',
-		name: 'productWarehouseId',
-		type: 'number',
-		default: 1,
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'ID of the warehouse',
-	},
-	{
-		displayName: 'Unit of Measure ID',
-		name: 'productUnitCodeId',
-		type: 'number',
-		default: 5,
-		placeholder: '5 = Unit',
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'ID of the unit of measure',
-	},
-	{
-		displayName: 'Quantity Decimal Places',
-		name: 'productQuantityDecimalPlaces',
-		type: 'number',
-		default: 2,
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'Number of decimal places for the quantity',
 	},
 
 	// — Prices —
@@ -324,10 +213,46 @@ export const cloudProductProperties: INodeProperties[] = [
 				description: 'Whether to ignore the line discount',
 			},
 			{
+				displayName: 'Inventory Class',
+				name: 'inventaryClass',
+				type: 'options',
+				default: 'MERCADORIAS',
+				options: [
+					{ name: 'By-Products', value: 'SUBPRODUTOS' },
+					{ name: 'Finished Goods', value: 'PRODUTOS_ACABADOS' },
+					{ name: 'Merchandise', value: 'MERCADORIAS' },
+					{ name: 'Packaging', value: 'EMBALAGENS' },
+					{ name: 'Raw Materials', value: 'MATERIAS_PRIMAS' },
+					{ name: 'Work in Progress', value: 'PRODUTOS_CURSO' },
+				],
+				description: 'Inventory class of the product',
+			},
+			{
 				displayName: 'Notes',
 				name: 'obs',
 				type: 'string',
 				default: '',
+			},
+			{
+				displayName: 'Quantity Decimal Places',
+				name: 'quantityDecimalPlaces',
+				type: 'number',
+				default: 2,
+				description: 'Number of decimal places for the quantity',
+			},
+			{
+				displayName: 'SAF-T Class',
+				name: 'saftClass',
+				type: 'options',
+				default: 'SAFT_PROD',
+				options: [
+					{ name: 'Excluded (E)', value: 'SAFT_EXCL' },
+					{ name: 'Other (O)', value: 'SAFT_OTHER' },
+					{ name: 'Product (P)', value: 'SAFT_PROD' },
+					{ name: 'Service (S)', value: 'SAFT_SERV' },
+					{ name: 'Tax/Fee (I)', value: 'SAFT_TAX' },
+				],
+				description: 'SAF-T classification of the product',
 			},
 			{
 				displayName: 'Suspended',
@@ -342,6 +267,34 @@ export const cloudProductProperties: INodeProperties[] = [
 				type: 'boolean',
 				default: false,
 				description: 'Whether the price is a total price',
+			},
+			{
+				displayName: 'Unit of Measure ID',
+				name: 'unitCodeId',
+				type: 'number',
+				default: 5,
+				placeholder: '5 = Unit',
+				description: 'ID of the unit of measure',
+			},
+			{
+				displayName: 'VAT Type',
+				name: 'vatType',
+				type: 'options',
+				default: 'NORMAL',
+				options: [
+					{ name: 'Exempt', value: 'ISENTO' },
+					{ name: 'Intermediate', value: 'INTERMEDIO' },
+					{ name: 'Normal', value: 'NORMAL' },
+					{ name: 'Reduced', value: 'REDUZIDO' },
+				],
+				description: 'Type of VAT rate',
+			},
+			{
+				displayName: 'Warehouse ID',
+				name: 'warehouseId',
+				type: 'number',
+				default: 1,
+				description: 'ID of the warehouse',
 			},
 		],
 	},

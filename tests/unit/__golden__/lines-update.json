@@ -1,0 +1,11 @@
+{
+	"method": "POST",
+	"url": "/documents/1/lines/3",
+	"qs": {},
+	"body": {
+		"idSku": 5,
+		"quantity": 3,
+		"valUn": 11,
+		"discountTotalPercent": 10
+	}
+}

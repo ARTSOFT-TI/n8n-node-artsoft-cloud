@@ -20,13 +20,22 @@ Modulo de gestao de contas correntes na API ARTSOFT Cloud Invoice. Permite lista
 
 | Campo | Tipo | Descricao |
 |-------|------|-----------|
-| $search | string | Termo de pesquisa |
-| $filter | string | Expressao de filtro |
-| $size | number | Numero de resultados por pagina (default: 10) |
-| $sort | string | Campo de ordenacao |
-| $direction | options | Direcao da ordenacao (asc/desc) |
+| filters | collection | Filtros opcionais: `search`, `filter`, `sort`, `direction` (ver abaixo) |
+| returnAll | boolean | Devolve todos os resultados (o node percorre as paginas internamente) |
+| limit | number | Maximo de resultados a devolver (default: 50; so aparece se `returnAll` estiver desligado) |
+
+### Filtros (colecao opcional)
+
+| Campo | Tipo | Default | Descricao |
+|-------|------|---------|-----------|
+| search | string | '' | Termo de pesquisa |
+| filter | string | '' | Expressao de filtro |
+| sort | string | '' | Campo de ordenacao |
+| direction | options | asc | Direcao da ordenacao (asc/desc) |
 
 ## Campos para Criar Debito / Credito
+
+Os campos opcionais ficam na colecao **Additional Fields** (em branco por defeito). Na atualizacao, so sao alterados os campos que forem adicionados a colecao.
 
 ### Campos Principais
 
@@ -35,11 +44,6 @@ Modulo de gestao de contas correntes na API ARTSOFT Cloud Invoice. Permite lista
 | caIdSerie | number | Sim | ID da serie de configuracao |
 | caIdThirdParty | number | Sim | ID do cliente ou fornecedor |
 | caValCurrAcc | number | Sim | Valor da conta corrente (precisao: 2 casas decimais) |
-| caFiscalNumber | string | Nao | NIF do terceiro |
-| caBalance | number | Nao | Saldo total (precisao: 2 casas decimais) |
-| caDocDate | dateTime | Nao | Data do documento (default: data atual) |
-| caComment | string | Nao | Observacoes |
-| caDocReference | string | Nao | Referencia ao documento |
 
 ### Campos Adicionais (colecao opcional -- criacao)
 
@@ -48,6 +52,11 @@ Modulo de gestao de contas correntes na API ARTSOFT Cloud Invoice. Permite lista
 | vencDate | dateTime | '' | Data de vencimento |
 | payDate | dateTime | '' | Data de pagamento |
 | isTotalManualMode | boolean | false | Modo manual de calculo de total |
+| fiscalNumber | string | '' | NIF do terceiro |
+| balance | number | 0 | Saldo total (precisao: 2 casas decimais) |
+| docDate | dateTime | data atual | Data do documento |
+| comment | string | '' | Observacoes |
+| docReference | string | '' | Referencia ao documento |
 
 ### IVA do Lancamento (fixedCollection -- debito e atualizacao)
 
@@ -84,10 +93,6 @@ Disponivel apenas na operacao de criacao de credito.
 | Campo | Tipo | Obrigatorio | Descricao |
 |-------|------|-------------|-----------|
 | currAccountId | string | Sim | ID da conta corrente |
-| caUpdateComment | string | Nao | Observacoes |
-| caUpdateDocReference | string | Nao | Referencia ao documento |
-| caUpdateValCurrAcc | number | Nao | Valor da conta corrente |
-| caUpdateBalance | number | Nao | Saldo total |
 
 ### Campos Adicionais (colecao opcional -- atualizacao)
 
@@ -106,6 +111,10 @@ Disponivel apenas na operacao de criacao de credito.
 | salesPersonId | number | 0 | ID do vendedor |
 | salesPersonName | string | '' | Nome do vendedor |
 | salesPersonFiscalNumber | string | '' | NIF do vendedor |
+| comment | string | '' | Observacoes |
+| docReference | string | '' | Referencia ao documento |
+| valCurrAcc | number | 0 | Valor da conta corrente |
+| balance | number | 0 | Saldo total |
 
 ### Itens a Regularizar (fixedCollection -- atualizacao)
 

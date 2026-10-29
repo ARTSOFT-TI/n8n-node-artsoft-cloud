@@ -1,4 +1,5 @@
 import { INodeProperties } from 'n8n-workflow';
+import { filtersProperty, returnAllProperties } from '../GenericFunctions';
 
 export const cloudSalespersonOperations = [
 	{
@@ -58,50 +59,8 @@ export const cloudSalespersonProperties: INodeProperties[] = [
 	// ══════════════════════════════════════════════════════════════════
 	// LIST — pagination
 	// ══════════════════════════════════════════════════════════════════
-	{
-		displayName: 'Search',
-		name: '$search',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: ['cloudListSalespersons'] } },
-		description: 'Search term',
-	},
-	{
-		displayName: 'Filter',
-		name: '$filter',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: ['cloudListSalespersons'] } },
-		description: 'Filter expression',
-	},
-	{
-		displayName: 'Page Size',
-		name: '$size',
-		type: 'number',
-		default: 10,
-		displayOptions: { show: { resource: [R], operation: ['cloudListSalespersons'] } },
-		description: 'Number of results per page',
-	},
-	{
-		displayName: 'Sort By',
-		name: '$sort',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: ['cloudListSalespersons'] } },
-		description: 'Field to sort by',
-	},
-	{
-		displayName: 'Direction',
-		name: '$direction',
-		type: 'options',
-		default: 'asc',
-		options: [
-			{ name: 'Ascending', value: 'asc' },
-			{ name: 'Descending', value: 'desc' },
-		],
-		displayOptions: { show: { resource: [R], operation: ['cloudListSalespersons'] } },
-		description: 'Sort direction',
-	},
+	filtersProperty(R, ['cloudListSalespersons']),
+	...returnAllProperties(R, ['cloudListSalespersons']),
 
 	// ══════════════════════════════════════════════════════════════════
 	// CREATE / UPDATE — individual fields
@@ -142,80 +101,6 @@ export const cloudSalespersonProperties: INodeProperties[] = [
 		displayOptions: { show: { resource: [R], operation: CU } },
 		description: 'Tax identification number',
 	},
-	{
-		displayName: 'Email',
-		name: 'salespersonEmail',
-		type: 'string',
-		placeholder: 'name@email.com',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'Email address of the salesperson',
-	},
-
-	// — Address —
-	{
-		displayName: 'Address',
-		name: 'salespersonAddress',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'Street address of the salesperson',
-	},
-	{
-		displayName: 'Locality',
-		name: 'salespersonLocality',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: CU } },
-	},
-	{
-		displayName: 'Postal Code',
-		name: 'salespersonPostalCode',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'Postal code (e.g. 1000-001)',
-	},
-	{
-		displayName: 'District',
-		name: 'salespersonDistrict',
-		type: 'number',
-		default: 0,
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'ID of the district',
-	},
-	{
-		displayName: 'County',
-		name: 'salespersonCounty',
-		type: 'number',
-		default: 0,
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'ID of the county',
-	},
-	{
-		displayName: 'Parish',
-		name: 'salespersonParish',
-		type: 'number',
-		default: 0,
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'ID of the parish',
-	},
-	{
-		displayName: 'Country Region',
-		name: 'salespersonCountryRegionId',
-		type: 'number',
-		default: 25,
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'ID of the country region',
-	},
-	{
-		displayName: 'Country Code',
-		name: 'salespersonCountryCode',
-		type: 'number',
-		default: 620,
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'Country code (620 = Portugal)',
-	},
 
 	// — Additional fields —
 	{
@@ -226,6 +111,13 @@ export const cloudSalespersonProperties: INodeProperties[] = [
 		default: {},
 		displayOptions: { show: { resource: [R], operation: CU } },
 		options: [
+			{
+				displayName: 'Address',
+				name: 'address',
+				type: 'string',
+				default: '',
+				description: 'Street address of the salesperson',
+			},
 			{
 				displayName: 'Anonymous',
 				name: 'anonymous',
@@ -241,11 +133,54 @@ export const cloudSalespersonProperties: INodeProperties[] = [
 				description: 'Date of birth (ISO 8601)',
 			},
 			{
+				displayName: 'Country Code',
+				name: 'countryCode',
+				type: 'number',
+				default: 620,
+				description: 'Country code (620 = Portugal)',
+			},
+			{
+				displayName: 'Country Region',
+				name: 'countryRegionId',
+				type: 'number',
+				default: 25,
+				description: 'ID of the country region',
+			},
+			{
+				displayName: 'County',
+				name: 'county',
+				type: 'number',
+				default: 0,
+				description: 'ID of the county',
+			},
+			{
+				displayName: 'District',
+				name: 'district',
+				type: 'number',
+				default: 0,
+				description: 'ID of the district',
+			},
+			{
+				displayName: 'Email',
+				name: 'email',
+				type: 'string',
+				placeholder: 'name@email.com',
+				default: '',
+				description: 'Email address of the salesperson',
+			},
+			{
 				displayName: 'Inactive',
 				name: 'inactive',
 				type: 'boolean',
 				default: false,
 				description: 'Whether the salesperson is inactive',
+			},
+			{
+				displayName: 'Locality',
+				name: 'locality',
+				type: 'string',
+				default: '',
+				description: 'Locality of the address',
 			},
 			{
 				displayName: 'Mobile Phone Country',
@@ -260,10 +195,24 @@ export const cloudSalespersonProperties: INodeProperties[] = [
 				default: '',
 			},
 			{
+				displayName: 'Parish',
+				name: 'parish',
+				type: 'number',
+				default: 0,
+				description: 'ID of the parish',
+			},
+			{
 				displayName: 'Phone Country',
 				name: 'phoneNumberCountryId',
 				type: 'number',
 				default: 620,
+			},
+			{
+				displayName: 'Postal Code',
+				name: 'postalCode',
+				type: 'string',
+				default: '',
+				description: 'Postal code (e.g. 1000-001)',
 			},
 			{
 				displayName: 'Private Record',

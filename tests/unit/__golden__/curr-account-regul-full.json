@@ -1,0 +1,28 @@
+{
+	"method": "POST",
+	"url": "/curr-account/regul",
+	"body": {
+		"idSerie": 1,
+		"idThirdParty": 2,
+		"valCurrAcc": 100,
+		"fiscalNumber": "999",
+		"balance": 50,
+		"docDate": "2026-02-02",
+		"comment": "c",
+		"docReference": "ref",
+		"toRegulList": [
+			{
+				"id": 1,
+				"regulValue": 10,
+				"value": 10,
+				"balance": 0,
+				"type": "CREDITOS_CLI",
+				"isRegulBy": false,
+				"hasTaxes": false,
+				"idDocFr": 0,
+				"docFrInvoiceNumber": null,
+				"regulDate": null
+			}
+		]
+	}
+}

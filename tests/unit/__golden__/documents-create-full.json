@@ -1,0 +1,12 @@
+{
+	"method": "POST",
+	"url": "/documents/header",
+	"body": {
+		"idSerie": 3,
+		"idWarehouse": 2,
+		"fiscalNumber": "999999990",
+		"idThirdParty": 10,
+		"createThirdParty": true,
+		"docDate": "2026-03-01"
+	}
+}

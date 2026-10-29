@@ -1,0 +1,9 @@
+{
+	"method": "POST",
+	"url": "/documents/header",
+	"body": {
+		"idSerie": 3,
+		"idWarehouse": 1,
+		"docDate": "2026-01-15"
+	}
+}

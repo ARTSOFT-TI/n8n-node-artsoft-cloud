@@ -1,0 +1,41 @@
+{
+	"method": "POST",
+	"url": "/products/",
+	"body": {
+		"sku": "P-1",
+		"mainName": "Produto",
+		"saftClass": "SAFT_SERV",
+		"vatType": "ISENTO",
+		"inventaryClass": "MATERIAS_PRIMAS",
+		"status": "ACTIVE",
+		"quantityDecimalPlaces": 3,
+		"unitCodeId": 1,
+		"warehouse": {
+			"id": 2,
+			"retired": false,
+			"suspended": false,
+			"status": "ACTIVE"
+		},
+		"flags": {
+			"ignoreHeaderDiscount": false,
+			"ignoreLineDiscount": false,
+			"discontinued": false,
+			"suspended": false,
+			"totalPrice": false
+		},
+		"exemptVatId": null,
+		"prices": [
+			{
+				"price": 9.5,
+				"number": 1,
+				"currencyId": 1,
+				"beginDate": "2026-01-01T00:00:00.000Z",
+				"endDate": "2026-12-31T00:00:00.000Z"
+			}
+		],
+		"optionalCodes": [],
+		"relatedSkus": [],
+		"hierarchies": {},
+		"obs": "x"
+	}
+}

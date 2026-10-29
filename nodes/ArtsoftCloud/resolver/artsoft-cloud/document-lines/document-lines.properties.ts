@@ -1,4 +1,5 @@
 import { INodeProperties } from 'n8n-workflow';
+import { returnAllProperties } from '../GenericFunctions';
 
 export const cloudDocumentLineOperations = [
 	{
@@ -81,44 +82,11 @@ export const cloudDocumentLineProperties: INodeProperties[] = [
 	// ══════════════════════════════════════════════════════════════════
 	// LIST — simple pagination
 	// ══════════════════════════════════════════════════════════════════
-	{
-		displayName: 'Page',
-		name: 'page',
-		type: 'number',
-		default: 0,
-		displayOptions: { show: { resource: [R], operation: ['cloudListDocumentLines'] } },
-		description: 'Page number (starts at 0)',
-	},
-	{
-		displayName: 'Page Size',
-		name: 'size',
-		type: 'number',
-		default: 10,
-		displayOptions: { show: { resource: [R], operation: ['cloudListDocumentLines'] } },
-		description: 'Number of results per page',
-	},
-	{
-		displayName: 'Filter',
-		name: 'filter',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: ['cloudListDocumentLines'] } },
-		description: 'Filter expression',
-	},
+	...returnAllProperties(R, ['cloudListDocumentLines']),
 
 	// ══════════════════════════════════════════════════════════════════
 	// CREATE / UPDATE — credit limit confirmation
 	// ══════════════════════════════════════════════════════════════════
-	{
-		displayName: 'Confirm Credit Limit',
-		name: 'confirmCreditLimit',
-		type: 'boolean',
-		default: false,
-		displayOptions: {
-			show: { resource: [R], operation: ['cloudCreateDocumentLine', 'cloudUpdateDocumentLine'] },
-		},
-		description: 'Whether to confirm exceeding the credit limit',
-	},
 
 	// ══════════════════════════════════════════════════════════════════
 	// CREATE / UPDATE — individual fields
@@ -167,6 +135,13 @@ export const cloudDocumentLineProperties: INodeProperties[] = [
 			show: { resource: [R], operation: ['cloudCreateDocumentLine', 'cloudUpdateDocumentLine'] },
 		},
 		options: [
+			{
+				displayName: 'Confirm Credit Limit',
+				name: 'confirmCreditLimit',
+				type: 'boolean',
+				default: false,
+				description: 'Whether to confirm exceeding the credit limit',
+			},
 			{
 				displayName: 'Gross Unit Price',
 				name: 'valUnGross',

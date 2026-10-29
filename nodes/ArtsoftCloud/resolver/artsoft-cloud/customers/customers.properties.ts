@@ -1,4 +1,5 @@
 import { INodeProperties } from 'n8n-workflow';
+import { filtersProperty, returnAllProperties } from '../GenericFunctions';
 
 export const cloudCustomerOperations = [
 	{
@@ -55,50 +56,8 @@ export const cloudCustomerProperties: INodeProperties[] = [
 	// ══════════════════════════════════════════════════════════════════
 	// LIST — pagination
 	// ══════════════════════════════════════════════════════════════════
-	{
-		displayName: 'Search',
-		name: '$search',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: ['cloudListCustomers'] } },
-		description: 'Search term',
-	},
-	{
-		displayName: 'Filter',
-		name: '$filter',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: ['cloudListCustomers'] } },
-		description: 'Filter expression',
-	},
-	{
-		displayName: 'Page Size',
-		name: '$size',
-		type: 'number',
-		default: 10,
-		displayOptions: { show: { resource: [R], operation: ['cloudListCustomers'] } },
-		description: 'Number of results per page',
-	},
-	{
-		displayName: 'Sort By',
-		name: '$sort',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: ['cloudListCustomers'] } },
-		description: 'Field to sort by',
-	},
-	{
-		displayName: 'Direction',
-		name: '$direction',
-		type: 'options',
-		default: 'asc',
-		options: [
-			{ name: 'Ascending', value: 'asc' },
-			{ name: 'Descending', value: 'desc' },
-		],
-		displayOptions: { show: { resource: [R], operation: ['cloudListCustomers'] } },
-		description: 'Sort direction',
-	},
+	filtersProperty(R, ['cloudListCustomers']),
+	...returnAllProperties(R, ['cloudListCustomers']),
 
 	// ══════════════════════════════════════════════════════════════════
 	// CREATE / UPDATE — individual fields
@@ -139,107 +98,6 @@ export const cloudCustomerProperties: INodeProperties[] = [
 		displayOptions: { show: { resource: [R], operation: CU } },
 		description: 'Tax identification number (VAT/NIF)',
 	},
-	{
-		displayName: 'Is Company',
-		name: 'customerIsCompany',
-		type: 'boolean',
-		default: false,
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'Whether the customer is a company',
-	},
-	{
-		displayName: 'Email',
-		name: 'customerEmail',
-		type: 'string',
-		placeholder: 'name@email.com',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'Email address of the customer',
-	},
-
-	// — Address —
-	{
-		displayName: 'Address',
-		name: 'customerAddress',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'Street address of the customer',
-	},
-	{
-		displayName: 'Locality',
-		name: 'customerLocality',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'Locality of the address',
-	},
-	{
-		displayName: 'Postal Code',
-		name: 'customerPostalCode',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'Postal code (e.g. 1000-001)',
-	},
-	{
-		displayName: 'District',
-		name: 'customerDistrict',
-		type: 'number',
-		default: 0,
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'District ID',
-	},
-	{
-		displayName: 'County',
-		name: 'customerCounty',
-		type: 'number',
-		default: 0,
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'County ID',
-	},
-	{
-		displayName: 'Parish',
-		name: 'customerParish',
-		type: 'number',
-		default: 0,
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'Parish ID',
-	},
-	{
-		displayName: 'Country Region',
-		name: 'customerCountryRegionId',
-		type: 'number',
-		default: 0,
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'Country region ID',
-	},
-	{
-		displayName: 'Country Code',
-		name: 'customerCountryCode',
-		type: 'number',
-		default: 620,
-		displayOptions: { show: { resource: [R], operation: CU } },
-		description: 'Country code (620 = Portugal)',
-	},
-
-	// — Company —
-	{
-		displayName: 'Trade Name',
-		name: 'customerTradeName',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: CU, customerIsCompany: [true] } },
-		description: 'Trade name of the company',
-	},
-	{
-		displayName: 'EORI',
-		name: 'customerEori',
-		type: 'string',
-		default: '',
-		displayOptions: { show: { resource: [R], operation: CU, customerIsCompany: [true] } },
-		description: 'EORI number',
-	},
 
 	// — Additional options —
 	{
@@ -250,6 +108,13 @@ export const cloudCustomerProperties: INodeProperties[] = [
 		default: {},
 		displayOptions: { show: { resource: [R], operation: CU } },
 		options: [
+			{
+				displayName: 'Address',
+				name: 'address',
+				type: 'string',
+				default: '',
+				description: 'Street address of the customer',
+			},
 			{
 				displayName: 'Anonymous',
 				name: 'anonymous',
@@ -263,6 +128,27 @@ export const cloudCustomerProperties: INodeProperties[] = [
 				type: 'string',
 				default: '',
 				description: 'Birth date (ISO 8601)',
+			},
+			{
+				displayName: 'Country Code',
+				name: 'countryCode',
+				type: 'number',
+				default: 620,
+				description: 'Country code (620 = Portugal)',
+			},
+			{
+				displayName: 'Country Region',
+				name: 'countryRegionId',
+				type: 'number',
+				default: 0,
+				description: 'Country region ID',
+			},
+			{
+				displayName: 'County',
+				name: 'county',
+				type: 'number',
+				default: 0,
+				description: 'County ID',
 			},
 			{
 				displayName: 'Credit Limit',
@@ -286,12 +172,34 @@ export const cloudCustomerProperties: INodeProperties[] = [
 				description: 'Default discount for the customer',
 			},
 			{
+				displayName: 'District',
+				name: 'district',
+				type: 'number',
+				default: 0,
+				description: 'District ID',
+			},
+			{
 				displayName: 'Document Delivery Email',
 				name: 'documentDeliveryEmail',
 				type: 'string',
 				placeholder: 'name@email.com',
 				default: '',
 				description: 'Email address where documents are delivered',
+			},
+			{
+				displayName: 'Email',
+				name: 'email',
+				type: 'string',
+				placeholder: 'name@email.com',
+				default: '',
+				description: 'Email address of the customer',
+			},
+			{
+				displayName: 'EORI',
+				name: 'eori',
+				type: 'string',
+				default: '',
+				description: 'EORI number',
 			},
 			{
 				displayName: 'Exempt VAT ID',
@@ -315,6 +223,20 @@ export const cloudCustomerProperties: INodeProperties[] = [
 				description: 'Whether the customer is inactive',
 			},
 			{
+				displayName: 'Is Company',
+				name: 'isCompany',
+				type: 'boolean',
+				default: false,
+				description: 'Whether the customer is a company',
+			},
+			{
+				displayName: 'Locality',
+				name: 'locality',
+				type: 'string',
+				default: '',
+				description: 'Locality of the address',
+			},
+			{
 				displayName: 'Mobile Country',
 				name: 'mobileNumberCountryId',
 				type: 'number',
@@ -336,11 +258,25 @@ export const cloudCustomerProperties: INodeProperties[] = [
 				description: 'Notes about the customer',
 			},
 			{
+				displayName: 'Parish',
+				name: 'parish',
+				type: 'number',
+				default: 0,
+				description: 'Parish ID',
+			},
+			{
 				displayName: 'Phone Country',
 				name: 'phoneNumberCountryId',
 				type: 'number',
 				default: 620,
 				description: 'Country ID of the phone number',
+			},
+			{
+				displayName: 'Postal Code',
+				name: 'postalCode',
+				type: 'string',
+				default: '',
+				description: 'Postal code (e.g. 1000-001)',
 			},
 			{
 				displayName: 'Private Record',
@@ -359,6 +295,13 @@ export const cloudCustomerProperties: INodeProperties[] = [
 					{ name: 'Inactive', value: 'INACTIVE' },
 				],
 				description: 'Status of the customer',
+			},
+			{
+				displayName: 'Trade Name',
+				name: 'tradeName',
+				type: 'string',
+				default: '',
+				description: 'Trade name of the company',
 			},
 			{
 				displayName: 'URL',

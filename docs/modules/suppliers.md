@@ -16,13 +16,22 @@ Modulo de gestao de fornecedores na API ARTSOFT Cloud Invoice. Permite listar, c
 
 | Campo | Tipo | Descricao |
 |-------|------|-----------|
-| $search | string | Termo de pesquisa |
-| $filter | string | Expressao de filtro |
-| $size | number | Numero de resultados por pagina (default: 10) |
-| $sort | string | Campo de ordenacao |
-| $direction | options | Direcao da ordenacao (asc/desc) |
+| filters | collection | Filtros opcionais: `search`, `filter`, `sort`, `direction` (ver abaixo) |
+| returnAll | boolean | Devolve todos os resultados (o node percorre as paginas internamente) |
+| limit | number | Maximo de resultados a devolver (default: 50; so aparece se `returnAll` estiver desligado) |
+
+### Filtros (colecao opcional)
+
+| Campo | Tipo | Default | Descricao |
+|-------|------|---------|-----------|
+| search | string | '' | Termo de pesquisa |
+| filter | string | '' | Expressao de filtro |
+| sort | string | '' | Campo de ordenacao |
+| direction | options | asc | Direcao da ordenacao (asc/desc) |
 
 ## Campos para Criar / Atualizar
+
+Os campos opcionais ficam na colecao **Additional Fields** (em branco por defeito). Na atualizacao, so sao alterados os campos que forem adicionados a colecao.
 
 ### Campos Principais (obrigatorios na criacao)
 
@@ -32,27 +41,6 @@ Modulo de gestao de fornecedores na API ARTSOFT Cloud Invoice. Permite listar, c
 | supplierName | string | Sim | Nome completo do fornecedor |
 | supplierShortName | string | Sim | Abreviatura do nome |
 | supplierFiscalNumber | string | Sim | NIF - Numero de identificacao fiscal |
-| supplierIsCompany | boolean | Nao | Indica se o fornecedor e uma empresa (default: false) |
-
-### Morada
-
-| Campo | Tipo | Obrigatorio | Descricao |
-|-------|------|-------------|-----------|
-| supplierAddress | string | Nao | Endereco do fornecedor |
-| supplierLocality | string | Nao | Localidade |
-| supplierPostalCode | string | Nao | Codigo postal (ex: 1000-001) |
-| supplierDistrict | number | Nao | ID do distrito |
-| supplierCounty | number | Nao | ID do concelho |
-| supplierParish | number | Nao | ID da freguesia |
-| supplierCountryRegionId | number | Nao | ID da regiao do pais (default: 0) |
-| supplierCountryCode | number | Nao | Codigo do pais (default: 620 = Portugal) |
-
-### Empresa (visiveis apenas quando supplierIsCompany = true)
-
-| Campo | Tipo | Obrigatorio | Descricao |
-|-------|------|-------------|-----------|
-| supplierTradeName | string | Nao | Nome comercial da empresa |
-| supplierEori | string | Nao | Numero EORI |
 
 ### Campos Adicionais (colecao opcional)
 
@@ -71,6 +59,17 @@ Modulo de gestao de fornecedores na API ARTSOFT Cloud Invoice. Permite listar, c
 | privateRecord | boolean | false | Registo privado |
 | phoneNumberCountryId | number | 620 | Codigo do pais do telefone |
 | mobileNumberCountryId | number | 620 | Codigo do pais do telemovel |
+| isCompany | boolean | false | Indica se o fornecedor e uma empresa |
+| address | string | '' | Endereco do fornecedor |
+| locality | string | '' | Localidade |
+| postalCode | string | '' | Codigo postal (ex: 1000-001) |
+| district | number | 0 | ID do distrito |
+| county | number | 0 | ID do concelho |
+| parish | number | 0 | ID da freguesia |
+| countryRegionId | number | 0 | ID da regiao do pais |
+| countryCode | number | 620 | Codigo do pais (620 = Portugal) |
+| tradeName | string | '' | Nome comercial da empresa |
+| eori | string | '' | Numero EORI |
 
 ## Comportamento Especial
 

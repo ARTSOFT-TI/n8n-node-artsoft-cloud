@@ -22,22 +22,36 @@ Modulo de gestao de documentos de faturacao e compras na API ARTSOFT Cloud Invoi
 | Campo | Tipo | Descricao |
 |-------|------|-----------|
 | saftType | string | Tipo SAFT (ex: FT, FR, ND, NC) -- obrigatorio para listagem por tipo |
-| $search | string | Termo de pesquisa |
-| $filter | string | Expressao de filtro |
-| $size | number | Numero de resultados por pagina (default: 10) |
-| $sort | string | Campo de ordenacao |
-| $direction | options | Direcao da ordenacao (asc/desc) |
+| filters | collection | Filtros opcionais: `search`, `filter`, `sort`, `direction` (ver abaixo) |
+| returnAll | boolean | Devolve todos os resultados (o node percorre as paginas internamente) |
+| limit | number | Maximo de resultados a devolver (default: 50; so aparece se `returnAll` estiver desligado) |
+
+### Filtros (colecao opcional)
+
+| Campo | Tipo | Default | Descricao |
+|-------|------|---------|-----------|
+| search | string | '' | Termo de pesquisa |
+| filter | string | '' | Expressao de filtro |
+| sort | string | '' | Campo de ordenacao |
+| direction | options | asc | Direcao da ordenacao (asc/desc) |
 
 ## Campos para Criar Cabecalho
+
+Os campos opcionais ficam na colecao **Additional Fields** (em branco por defeito). Na atualizacao, so sao alterados os campos que forem adicionados a colecao.
 
 | Campo | Tipo | Obrigatorio | Descricao |
 |-------|------|-------------|-----------|
 | idSerie | number | Sim | ID da serie de configuracao do documento |
-| idThirdParty | number | Nao | ID do cliente ou fornecedor (ignorado se NIF preenchido) |
-| fiscalNumber | string | Nao | NIF -- usado quando o ID do terceiro nao esta disponivel |
 | idWarehouse | number | Sim | ID do armazem (default: 1) |
-| createThirdParty | boolean | Nao | Cria automaticamente o terceiro se o NIF nao existir (default: false) |
-| docDate | dateTime | Nao | Data do documento (default: data atual) |
+
+### Campos Adicionais (colecao opcional -- criacao)
+
+| Campo | Tipo | Default | Descricao |
+|-------|------|---------|-----------|
+| idThirdParty | number | 0 | ID do cliente ou fornecedor (ignorado se NIF preenchido) |
+| fiscalNumber | string | '' | NIF -- usado quando o ID do terceiro nao esta disponivel |
+| createThirdParty | boolean | false | Cria automaticamente o terceiro se o NIF nao existir |
+| docDate | dateTime | data atual | Data do documento |
 
 ## Campos para Atualizar
 
@@ -46,12 +60,17 @@ Modulo de gestao de documentos de faturacao e compras na API ARTSOFT Cloud Invoi
 | Campo | Tipo | Obrigatorio | Descricao |
 |-------|------|-------------|-----------|
 | documentId | string | Sim | ID do documento a atualizar |
-| sign | boolean | Nao | Assinar o documento apos atualizacao (default: false) |
-| documentComment | string | Nao | Comentario / observacao |
-| documentDocReference | string | Nao | Referencia do documento (financialInfo.docReference) |
-| documentIdPayCond | number | Nao | ID da condicao de pagamento (financialInfo.idPayCond) |
-| documentIdVatTypeExemption | number | Nao | ID do tipo de isencao de IVA |
-| documentDiscountPercent | number | Nao | Percentagem de desconto global (total.discountPercent) |
+
+### Campos Adicionais (colecao opcional -- atualizacao)
+
+| Campo | Tipo | Default | Descricao |
+|-------|------|---------|-----------|
+| sign | boolean | false | Assinar o documento apos atualizacao |
+| comment | string | '' | Comentario / observacao |
+| docReference | string | '' | Referencia do documento (financialInfo.docReference) |
+| idPayCond | number | 0 | ID da condicao de pagamento (financialInfo.idPayCond) |
+| idVatTypeExemption | number | 0 | ID do tipo de isencao de IVA |
+| discountPercent | number | 0 | Percentagem de desconto global (total.discountPercent) |
 
 ### Info Financeira (colecao opcional)
 

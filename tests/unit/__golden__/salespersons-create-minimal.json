@@ -1,0 +1,49 @@
+{
+	"method": "POST",
+	"url": "/salespersons/",
+	"body": {
+		"number": 5,
+		"name": "Vend Dois",
+		"shortName": "VD",
+		"email": "",
+		"birthDate": "",
+		"status": "ACTIVE",
+		"inactive": false,
+		"countryCode": "620",
+		"countryRegionId": "25",
+		"taxPayer": {
+			"fiscalNumber": "999999995",
+			"countryCode": 620,
+			"status": 0,
+			"valid": true
+		},
+		"mainAddress": {
+			"name": "",
+			"status": "ACTIVE",
+			"address": "",
+			"postalCodeNumeric": "",
+			"locality": "",
+			"countryCode": 620,
+			"countryRegionId": 25,
+			"parish": 0,
+			"county": 0,
+			"district": 0,
+			"addressNumber": 0,
+			"hasCurrentAccount": false,
+			"latitude": 0,
+			"longitude": 0,
+			"validUntil": "2026-01-15T10:00:00.000Z",
+			"addressSubunit": "",
+			"postalCodeAlpha": "",
+			"localId": 0
+		},
+		"observations": {
+			"observation1": ""
+		},
+		"phoneNumberCountryId": 620,
+		"mobileNumberCountryId": 620,
+		"anonymous": false,
+		"privateRecord": false,
+		"concealmentReason": null
+	}
+}
